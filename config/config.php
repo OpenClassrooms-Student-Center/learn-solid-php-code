@@ -7,10 +7,10 @@
  *  @note : attention au / final
  */
 
-define('SERVEUR_URL', 'https://dev-21106438.users.info.unicaen.fr');
+define('SERVEUR_URL', '');
 
-define('BASE_URL', SERVEUR_URL . '/tpUpload/');
-define('BASE_FILE', '/perso/21106438/www-dev/tpUpload/');
+define('BASE_URL', SERVEUR_URL . '');
+define('BASE_FILE', '');
 
 define('LIB_FILE', BASE_FILE . 'modeles/');
 
