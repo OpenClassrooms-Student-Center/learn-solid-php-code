@@ -1,0 +1,41 @@
+
+/* *************************************
+     gestion de la mise en page
+***************************************** */
+
+
+
+#InnerWrapper { 
+  width: 100%;
+  margin: 20px 20px 20px 20px;
+  //float: left;
+}
+
+#content { 
+  margin: 0px 0px 0px 0px;
+  padding: 0px 15px;
+//  height: 100%;
+//  min-height: 400px;
+}
+
+#leftMenu { 
+  display: none
+}
+
+#rightMenu { 
+  display: none;
+}
+
+
+#footer { 
+  margin-bottom: 20px;
+}
+
+
+#header { 
+  padding: 20px 20px 0px 80px;
+ }
+
+.photo { 
+  text-align: center;
+}
