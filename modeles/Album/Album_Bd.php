@@ -1,4 +1,5 @@
 <?php
+use modeles/Album/Album;
 
 class Album_Bd {
 
@@ -47,7 +48,7 @@ static public function getPlayList($id) {
 
 
 /* Méthode enregistrer() : enregistre les données dans la Bd */
-  static public function enregistrerNouveau($album) { 
+  static public function enregistrerNouveau(Album $album) { 
     /* Enregistrer le fichier */
     
      /* creer la connection BD */
@@ -70,7 +71,7 @@ static public function getPlayList($id) {
 
 
   /* Méthode enregistrer() : enregistre les données dans la BdD */
- static public function enregistrerModif($album) { 
+ static public function enregistrerModif(Album $album) { 
    /* Enregistrer le fichier */
    
    /* creer la connection BD */
@@ -94,7 +95,7 @@ static public function getPlayList($id) {
   /* Méthode supprimer : faire la requête DELETE en BD 
    * même principe que précédement pour les exceptions
   */
- static public function supprimer($album) {
+ static public function supprimer(Album $album) {
      /* supprimer le fichier */
    
      /* creer la connection BD */
