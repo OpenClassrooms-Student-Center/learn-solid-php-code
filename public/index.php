@@ -2,7 +2,8 @@
 require_once("../config/config.php");
 try {
 
-  $action = isset($_GET['a']) ? $_GET['a'] : "";
+  $getRequest = $_GET;
+  $action = isset($getRequest['a']) ? $getRequest['a'] : "";
 
   /* initialisation des variables */
   $titre="";
@@ -10,13 +11,13 @@ try {
   $header = file_get_contents("../ui/fragments/header.frg.html");
   $footer = file_get_contents("../ui/fragments/footer.frg.html");
   $squelette = "../ui/pages/galerie.html.php";
-
+  
   switch($action) {
     /* écoute d'un album */
   case "ecouter" :
       $titre = "Ecoute de l'album";
-       if(isset($_GET['id'])){
-           $id_album = $_GET['id'];
+       if(isset($getRequest['id'])){
+           $id_album = $getRequest['id'];
            /* créer une playlist à partir des infos de la BD */
            $ListOfMusics = Album_Bd::getPlayList($id_album);
            if(count($ListOfMusics) == 0){$c = 'Album vide, Ajoutez des pistes';}
@@ -28,7 +29,7 @@ try {
                         if($i < 1)
                         {
                         $c = '<section id="album_view" class="span6">' . $ui->makePlayer();
-                        $c .='<ol>';
+                        $c .= '<ol>';
 
 
                             $c .= '<li class="playing">'. $ui->makeHtml() .'</li>';
@@ -36,7 +37,7 @@ try {
                         }else{$c .= '<li>'. $ui->makeHtml() .'</li>';}
 
                 }
-                $c .='</ol></section>';
+                $c .= '</ol></section>';
            }
            /* informations relatives à l'album */
            
