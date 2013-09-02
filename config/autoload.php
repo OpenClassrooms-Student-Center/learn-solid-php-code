@@ -47,8 +47,9 @@ function __autoload($className) {
   }
   
   $file=LIB_FILE . $obj . "/{$tclass[0]}";
-  if (sizeOf($tclass) >1) {
-    for ($i=1;$i<sizeOf($tclass); $i++) {
+  $sizeOfTclass = sizeOf($tclass);
+  if ($sizeOfTclass >1) {
+    for ($i=1;$i<$sizeOfTclass; $i++) {
       $file .= "_{$tclass[$i]}";
     }
   }
