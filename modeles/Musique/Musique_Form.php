@@ -28,7 +28,6 @@ class Musique_Form {
    
     $titre = $this->musique->getTitre();
     $id = $this->musique->getId(); 
-    $id_album = $this->musique->getId_album();
     $musique = $this->musique->getFichier();
     if ($this->musique->getFichier() != "") {
       $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
