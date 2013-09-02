@@ -202,7 +202,7 @@ EOT;
 			
             /* créer un Album à partir des infos du formulaire */   
             if (! $fileRequest['fichier']['error'] == 0) {  
-                throw new Exception("Problème d'upload, contactez un administrateur..."); die;
+                throw new Exception("Problème d'upload, contactez un administrateur...");
             /* en cas de fichier corrompu ou trop gros */
             }
             $data = is_array($postRequest) ? $postRequest : array();
