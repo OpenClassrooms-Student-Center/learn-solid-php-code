@@ -1,8 +1,11 @@
 <?php 
 require_once("../config/config.php");
 try {
-
-  $action = isset($_GET['a']) ? $_GET['a'] : "";
+  $getRequest = $_GET;
+  $postRequest = $_POST;
+  $fileRequest = $_FILES;
+  
+  $action = isset($getRequest['a']) ? $getRequest['a'] : "";
 
   // initialisation des variables
   $titre="";
@@ -42,8 +45,8 @@ EOT;
     /* modifier un album */
   case "modifier" : 
     $titre = "Modifier un album";
-    if (isset($_GET['id'])) {
-      $id = $_GET['id'];
+    if (isset($getRequest['id'])) {
+      $id = $getRequest['id'];
       $Album = Album_Bd::lire($id);
       $form = new Album_Form($Album);
       $c = '<div class="row-fluid show-grid">
@@ -63,8 +66,8 @@ EOT;
     $titre = "Création d'album";
     /* créer une Album à partir des infos du formulaire */  
     
-    $data = is_array($_POST) ? $_POST : array();
-    $file_data = is_array($_FILES) ? $_FILES : array();
+    $data = is_array($postRequest) ? $postRequest : array();
+    $file_data = is_array($fileRequest) ? $fileRequest : array();
     $data['fichier'] = $data['id'] . $file_data['fichier']['name'];
     Outils_Chaines::htmlEncodeArray($data);
     $Album = Album::initialize($data);
@@ -97,8 +100,8 @@ EOT;
   case "enregistrermodif":
     $titre = "Modifications enregistrées";
     /* créer un Album à partir des infos du formulaire et des infos de la BD */
-    $data = is_array($_POST) ? $_POST : array();
-    $file_data = is_array($_FILES['fichier']) ? $_FILES['fichier'] : array();
+    $data = is_array($postRequest) ? $postRequest : array();
+    $file_data = is_array($fileRequest['fichier']) ? $fileRequest['fichier'] : array();
     if (isset($data['id'])) {
         $id = $data['id'];
         
@@ -156,7 +159,7 @@ EOT;
 
   case "supprimer":
     $titre = "Album supprimé";
-      $id= $_GET['id'];
+      $id = $getRequest['id'];
     /* créer une Album à partir des infos de la BD */
          $Album = Album_Bd::lire($id); 
     /* supprimer l'Album */
@@ -183,8 +186,8 @@ EOT;
 /* Formulaire d'upload */
   case "uploader" :
       $titre = "Upload d'un titre";
-      if(isset($_GET['id'])){
-           $id_album = $_GET['id'];
+      if(isset($getRequest['id'])){
+           $id_album = $getRequest['id'];
           
            /* créer un album à partir des infos de la BD */
            $Musique = Musique::initialize();
@@ -195,17 +198,17 @@ EOT;
     
   /* Geston de l'upload */  
   case "ajouter_musique" :
-      if(isset($_GET['id_album'])){
+      if(isset($getRequest['id_album'])){
 			
             /* créer un Album à partir des infos du formulaire */   
-            if (! $_FILES['fichier']['error'] == 0) {  
+            if (! $fileRequest['fichier']['error'] == 0) {  
                 throw new Exception("Problème d'upload, contactez un administrateur..."); die;
             /* en cas de fichier corrompu ou trop gros */
             }
-            $data = is_array($_POST) ? $_POST : array();
-            $file_data = is_array($_FILES) ? $_FILES : array();
+            $data = is_array($postRequest) ? $postRequest : array();
+            $file_data = is_array($fileRequest) ? $fileRequest : array();
             
-            $data['id_album'] = $_GET['id_album']; 
+            $data['id_album'] = $getRequest['id_album']; 
             $data['fichier'] = $data['id_album'] . $file_data['fichier']['name'];
             Outils_Chaines::htmlEncodeArray($data);
             
@@ -238,8 +241,8 @@ EOT;
     
     case "modifier_musique":
        $titre = "Modifier une Musique";
-    if (isset($_GET['id'])) {
-      $id = $_GET['id'];
+    if (isset($getRequest['id'])) {
+      $id = $getRequest['id'];
       $Musique = Musique_Bd::lire($id);
       $form = new Musique_Form($Musique);
       $c = $form->makeForm(ADMIN_URL."index.php?a=modifier_musique_modif&amp;id=$id",'Modifier');
@@ -251,8 +254,8 @@ EOT;
     case "modifier_musique_modif":
         $titre = "Modifications enregistrées";
     /* créer un Album à partir des infos du formulaire et des infos de la BD */
-    $data = is_array($_POST) ? $_POST : array();
-    $file_data = is_array($_FILES['fichier']) ? $_FILES['fichier'] : array();
+    $data = is_array($postRequest) ? $postRequest : array();
+    $file_data = is_array($fileRequest['fichier']) ? $fileRequest['fichier'] : array();
     if (isset($data['id'])) {
         $id = $data['id'];
         
@@ -308,7 +311,7 @@ EOT;
 
     case "supprimer_musique":
         $titre = "Musique supprimée";
-        $id= $_GET['id'];
+        $id = $getRequest['id'];
     /* créer une Musique à partir des infos de la BD */
          $Music = Musique_Bd::lire($id); 
     /* supprimer la Musique en BD */
