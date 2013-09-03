@@ -18,7 +18,7 @@
  * Autoload.class.php 
  * \brief Sélection dynamique des classes nécessaires à l'application
  * @author Jean-Marc Lecarpentier, Hervé Le Crosnier
- *         Valérie Cauchard
+ *         Valérie Cauchard, Mickaël Andrieu
  * @since Janvier 2008
  */
 
@@ -36,7 +36,7 @@
  *
  *********************************************/
 
-function __autoload($className) {
+function my_autoloader($className) {
 
   if (preg_match('#_#', $className)) {
     $tclass=preg_split('#_#', $className);
@@ -61,5 +61,7 @@ function __autoload($className) {
   } else {
     throw new Exception("Erreur Autoload : le fichier {$file} n'existe pas");
   }
+  
+  spl_autoload_register('my_autoloader');
 } // fin de l'autoload
 ?>
