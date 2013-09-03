@@ -1,5 +1,6 @@
 <?php
 
+use modeles/Musique/Musique;
 /**
  * Description of Musique_Ui
  *
@@ -10,7 +11,7 @@ class Musique_Ui {
     public function __construct($musique){
         $this->musique = $musique;
     }
-    public static function factory($musique) {
+    public static function factory(Musique $musique) {
                 $extension=pathinfo($musique->getFichier(),PATHINFO_EXTENSION);
 		switch($extension) {
 		case "mp3" :
