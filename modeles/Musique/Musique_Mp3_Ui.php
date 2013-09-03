@@ -16,7 +16,6 @@ class Musique_Mp3_Ui extends Musique_Ui{
     
      /* Méthode afficher : afficher la musique */
   public function makeHtml() {
-    $id = $this->musique->getId();
     $titre = $this->musique->getTitre();
     
     $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
@@ -30,7 +29,6 @@ EOT;
   }
   
   public function makePlayer(){
-      $id = $this->musique->getId();
       $titre = $this->musique->getTitre();
       $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
       
@@ -55,7 +53,6 @@ EOT;
       $id = $this->musique->getId();
       $id_album = $this->musique->getId_album();
       $titre = $this->musique->getTitre();
-      $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
       $adminurl = ADMIN_URL;
       
       $html = <<<EOT
@@ -83,7 +80,6 @@ EOT;
   
   public function makeAdminRowHtml(){
       $id = $this->musique->getId();
-      $id_album = $this->musique->getId_album();
       $titre = $this->musique->getTitre();
       $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
       $adminurl = ADMIN_URL;
