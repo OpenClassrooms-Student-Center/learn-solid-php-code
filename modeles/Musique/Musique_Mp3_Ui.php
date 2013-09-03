@@ -81,7 +81,6 @@ EOT;
   public function makeAdminRowHtml(){
       $id = $this->musique->getId();
       $titre = $this->musique->getTitre();
-      $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
       $adminurl = ADMIN_URL;
       
       $html = <<<EOT
