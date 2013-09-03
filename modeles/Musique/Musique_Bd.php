@@ -1,5 +1,6 @@
 <?php
 
+use modeles/Musique/Musique;
 /**
  * Description of Musique_Bd
  *
@@ -27,7 +28,7 @@ class Musique_Bd {
   
 
   /* Méthode enregistrer() : enregistre les données dans la Bd */
-  static public function enregistrerNouveau($musique) { 
+  static public function enregistrerNouveau(Musique $musique) { 
 
      /* creer la connection BD */
     $db = Outils_Bd::getInstance()->getConnexion();
@@ -48,7 +49,7 @@ class Musique_Bd {
 
 
   /* Méthode enregistrer() : enregistre les données dans la BdD */
- static public function enregistrerModif($musique) { 
+ static public function enregistrerModif(Musique $musique) { 
    /* Enregistrer le fichier */
    
    /* creer la connection BD */
@@ -70,7 +71,7 @@ class Musique_Bd {
   /* Méthode supprimer : faire la requête DELETE en BD 
    * même principe que précédement pour les exceptions
   */
- static public function supprimer($musique) {
+ static public function supprimer(Musique $musique) {
      /* supprimer le fichier */
    
      /* creer la connection BD */
