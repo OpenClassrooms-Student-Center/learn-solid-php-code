@@ -113,7 +113,7 @@ class Outils_Chaines {
    */
 
   public static function htmlEncodeArray(& $tab, $htmlOk = array()) {
-    while (list($k, $v) = each($tab)) {
+    while (list($k) = each($tab)) {
       if (!is_array($tab[$k])) {
 	if (!in_array($k, $htmlOk)) {
 	  $tab[$k] = Outils_Chaines::htmlEncodeString($tab[$k]);
