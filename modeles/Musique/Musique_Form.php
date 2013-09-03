@@ -29,12 +29,6 @@ class Musique_Form {
     $titre = $this->musique->getTitre();
     $id = $this->musique->getId(); 
     $musique = $this->musique->getFichier();
-    if ($this->musique->getFichier() != "") {
-      $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
-      $musiquePresente = $fichierSrc;
-    } else {
-      $musiquePresente = "Pas de Musique Enregistrée";
-    }
     
     $text = <<<EOT
 <form class="form-horizontal" action="{$actionUrl}" method="post" enctype="multipart/form-data">
