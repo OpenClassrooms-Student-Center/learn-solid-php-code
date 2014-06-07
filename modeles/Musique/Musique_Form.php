@@ -63,8 +63,8 @@ EOT;
       $this->erreurs["titre"] = '<em class="label label-warning">Il faut entrer le titre.</em>';
       $flag = false;
     }
-    if (preg_match('$audio/mpeg$',$mime)== 0) {
-      $this->erreurs["fichier"] = '<em class="label label-warning">Fichier mp3 requis.</em>' ;
+    if (preg_match('$audio/mp3$',$mime)== 0) {
+      $this->erreurs["fichier"] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>' ;
       $flag = false;
     }
     return $flag;

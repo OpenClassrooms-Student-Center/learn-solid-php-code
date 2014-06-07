@@ -221,7 +221,7 @@ EOT;
 
                 /* enregistrer l'image dans l'entrepot */ 
                 $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->TypesValides = array('audio/mpeg');
+                $ObjFichier->TypesValides = array('audio/mp3');
                 $ObjFichier->setNom($data['fichier']);
                 $ObjFichier->UploadFichier(ENTREPOT_FILE);
                 

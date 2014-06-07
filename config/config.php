@@ -1,61 +1,36 @@
 <?php
 
 /**
- *
- *  URL de base de l'application
- *
- *  @note : attention au / final
+ * Global configuration of application
  */
 
-define('SERVEUR_URL', '');
-
-define('BASE_URL', SERVEUR_URL . '');
-define('BASE_FILE', '');
+define('SERVEUR_URL', 'http://www.weplaymusic.fr');
+define('BASE_URL', SERVEUR_URL . '/');
+define('BASE_FILE', __DIR__.'/../');
 
 define('LIB_FILE', BASE_FILE . 'modeles/');
 
 define('PUBLIC_URL', BASE_URL . "public/");
 define('ADMIN_URL', BASE_URL . "admin/");
 
-
 /**
- * entrepot 
+ * files repository 
  */
 define('ENTREPOT_URL', BASE_URL . 'entrepot/');
 define('ENTREPOT_FILE', BASE_FILE . 'entrepot/');
 
 /**
- * librairies externes
+ * external libraries
  */
 define('HELPER_URL', BASE_URL . 'helpers/');
 define('HELPER_FILE', BASE_FILE . 'helpers/');
 
-
-
 /**
- *
- *  Base de données
- *
+ * Database configuration
  */
-
 define('DB_CONFIG', "config/config_db.php");
-
-
-/**
- *
- *  Appel des autres fichiers de configuration
- *  et de l'Autoload
- *
- */
 
 
 require_once(BASE_FILE . 'config/autoload.php');
 require_once(BASE_FILE . DB_CONFIG);
-
-
-
-
-
-
-
 ?>
