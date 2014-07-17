@@ -11,7 +11,7 @@ class Outils_Upload {
 	private $Type           ='';
 	public $Repertoire     ='';
 	private $Temp           ='';
-	public $TypesValides   = array();
+	public $typesValides   = array();
 	private $Erreur         ='';
 
 
@@ -23,9 +23,9 @@ class Outils_Upload {
 
 	}
 
-	public  function TypesValides($TypesValides)
+	public  function setTypesValides($typesValides)
 	{
-			$this->TypesValides = $TypesValides;
+			$this->typesValides = $typesValides;
 	}	
 	
 	public  function UploadFichier($Repertoire='./')

@@ -17,9 +17,8 @@ class Musique_Ui {
 		case "mp3" :
 			return new Musique_Mp3_Ui($musique);
 			break;
-                case "ogg" :
-                       //return new Musique_Ui_Ogg($musique);
-                       break;
+      case "ogg" :
+      break;
 		default : 
 			throw new Exception("Le fichier pas de type reconnu : {$extension}");
 		}

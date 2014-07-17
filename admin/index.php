@@ -79,7 +79,7 @@ EOT;
         
         /* enregistrer l'image dans l'entrepot */
         $ObjFichier = new Outils_Upload('fichier');
-        $ObjFichier->TypesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
+        $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
         $ObjFichier->setNom($data['fichier']);
         $ObjFichier->UploadFichier(ENTREPOT_FILE);
         $ObjFichier->redimensionner(ENTREPOT_FILE.'/'.$data['fichier'], ENTREPOT_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
@@ -127,7 +127,7 @@ EOT;
          {
              //Si nouveau, alors upload/redimensionnement de la nouvelle image
              $ObjFichier = new Outils_Upload('fichier');
-             $ObjFichier->TypesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
+             $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
              $ObjFichier->setNom($data['fichier']);
              $ObjFichier->UploadFichier(ENTREPOT_FILE);
              $ObjFichier->redimensionner(ENTREPOT_FILE.'/'.$data['fichier'], ENTREPOT_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
@@ -221,7 +221,7 @@ EOT;
 
                 /* enregistrer l'image dans l'entrepot */ 
                 $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->TypesValides = array('audio/mp3');
+                $ObjFichier->typesValides = array('audio/mp3');
                 $ObjFichier->setNom($data['fichier']);
                 $ObjFichier->UploadFichier(ENTREPOT_FILE);
                 
