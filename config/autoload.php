@@ -54,7 +54,6 @@ function my_autoloader($className) {
     }
   }
   $file .= ".php";
-  //echo $file . "<br />";
   
   if (is_file($file)) {
     require_once($file);

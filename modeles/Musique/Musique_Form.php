@@ -6,7 +6,7 @@
  */
 class Musique_Form {
     
-    /* Données membres de la classe */
+    /* DonnÃ©es membres de la classe */
   protected $musique;
   protected $erreurs; // tableau contenant les erreurs du formulaire 
 
@@ -53,8 +53,8 @@ EOT;
 
   }
 
-   /* vérification du formulaire
-   * la méthode renvoie un booléen, on pourrait imaginer le faire avec 
+   /* vÃ©rification du formulaire
+   * la mÃ©thode renvoie un boolÃ©en, on pourrait imaginer le faire avec 
    * une exception mais ce n'est pas mieux
    */
   public function verifier($mime) {

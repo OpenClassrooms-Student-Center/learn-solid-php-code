@@ -51,10 +51,8 @@ class Musique {
 			return new Musique_Mp3($map);
 			break;
                 case "ogg" :
-                       //return Musique_Ogg::initialize($map);
                        break;
 		default : 
-			//throw new Exception("Le fichier pas de type reconnu : {$extension}");
                         return new Musique($map);
 		}
   }
