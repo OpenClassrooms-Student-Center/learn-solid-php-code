@@ -51,7 +51,7 @@ EOT;
   
   public function makeAdminHtml(){
       $id = $this->musique->getId();
-      $id_album = $this->musique->getId_album();
+      $id_album = $this->musique->getIdAlbum();
       $titre = $this->musique->getTitre();
       $adminurl = ADMIN_URL;
       

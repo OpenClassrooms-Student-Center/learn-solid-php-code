@@ -84,11 +84,11 @@ class Musique {
         $this->titre = $titre;
     }
 
-    public function getId_album() {
+    public function getIdAlbum() {
         return $this->id_album;
     }
 
-    public function setId_album($id_album) {
+    public function setIdAlbum($id_album) {
         $this->id_album = $id_album;
     }
 

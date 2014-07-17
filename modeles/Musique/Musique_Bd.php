@@ -40,7 +40,7 @@ class Musique_Bd {
 		'id' => $musique->getId(),
 		'titre' => $musique->getTitre(),
                 'fichier' => $musique->getFichier(),
-		'id_album' => $musique->getId_album()
+		'id_album' => $musique->getIdAlbum()
 		);
 
     /* executer la requete */

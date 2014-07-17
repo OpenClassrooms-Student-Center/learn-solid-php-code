@@ -33,19 +33,20 @@ class Outils_Upload {
             if(!is_uploaded_file($this->Temp))
             {
               $this->Erreur='Vous avez rien uploadé';
-		          return false;
+		return false;
+		
             }
 
             else if(!in_array($this->Type,$this->TypesValides))
             {
               $this->Erreur= 'Le fichier '.$this->Nom.' n\'est pas d\'un type valide';
-		          return false;
+		return false;
             }
 
             elseif(!move_uploaded_file($this->Temp, $Repertoire.$this->Nom))
             {
               $this->Erreur='Problème lors de la copie du fichier '.$this->Nom;
-		          return false;
+		return false;
             }
             else return true;
 	}
