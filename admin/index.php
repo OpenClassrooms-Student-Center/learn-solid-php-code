@@ -81,7 +81,7 @@ EOT;
         $ObjFichier = new Outils_Upload('fichier');
         $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
         $ObjFichier->setNom($data['fichier']);
-        $ObjFichier->UploadFichier(ENTREPOT_FILE);
+        $ObjFichier->uploadFichier(ENTREPOT_FILE);
         $ObjFichier->redimensionner(ENTREPOT_FILE.'/'.$data['fichier'], ENTREPOT_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
         Album_Bd::enregistrerNouveau($Album);
         
@@ -129,7 +129,7 @@ EOT;
              $ObjFichier = new Outils_Upload('fichier');
              $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
              $ObjFichier->setNom($data['fichier']);
-             $ObjFichier->UploadFichier(ENTREPOT_FILE);
+             $ObjFichier->uploadFichier(ENTREPOT_FILE);
              $ObjFichier->redimensionner(ENTREPOT_FILE.'/'.$data['fichier'], ENTREPOT_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
              if($case > 1)
              {
@@ -223,7 +223,7 @@ EOT;
                 $ObjFichier = new Outils_Upload('fichier');
                 $ObjFichier->typesValides = array('audio/mp3');
                 $ObjFichier->setNom($data['fichier']);
-                $ObjFichier->UploadFichier(ENTREPOT_FILE);
+                $ObjFichier->uploadFichier(ENTREPOT_FILE);
                 
                 /* enregistrement en Bd */
                 Musique_Bd::enregistrerNouveau($Musique);
@@ -283,7 +283,7 @@ EOT;
              $ObjFichier = new Outils_Upload('fichier');
              $ObjFichier->TypesValides = array('audio/ogg','audio/mpeg');
              $ObjFichier->setNom($data['fichier']);
-             $ObjFichier->UploadFichier(ENTREPOT_FILE);
+             $ObjFichier->uploadFichier(ENTREPOT_FILE);
              if($case > 1)
              {
              // Suppression de la musique d'origine

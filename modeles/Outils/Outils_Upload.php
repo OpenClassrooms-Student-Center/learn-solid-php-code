@@ -28,7 +28,7 @@ class Outils_Upload {
 			$this->typesValides = $typesValides;
 	}	
 	
-	public  function UploadFichier($Repertoire='./')
+	public  function uploadFichier($Repertoire='./')
 	{
             if(!is_uploaded_file($this->Temp))
             {
@@ -37,7 +37,7 @@ class Outils_Upload {
 		
             }
 
-            else if(!in_array($this->Type,$this->TypesValides))
+            else if(!in_array($this->Type,$this->typesValides))
             {
               $this->Erreur= 'Le fichier '.$this->Nom.' n\'est pas d\'un type valide';
 		return false;
@@ -49,11 +49,6 @@ class Outils_Upload {
 		return false;
             }
             else return true;
-	}
-	
-	public  function UploadErreur()
-	{
-			return $this->Erreur='Aucune erreur';
 	}
 
 	public  function setNom($Nom)
