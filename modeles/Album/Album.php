@@ -153,4 +153,3 @@ class Album {
   }
 
   } // fin class Photo
-?>

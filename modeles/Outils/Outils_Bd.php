@@ -2,8 +2,7 @@
 
 /**
  * @file BD.class.php Classes génériques permettant l'interfaçage avec
-une base de
- * données.
+ * une base de données.
  *
  * @author Jean-Marc Lecarpentier
  * @since Octobre 2007
@@ -55,5 +54,3 @@ class Outils_Bd {
     return $this->connexion;
   }
 }
-
-?>

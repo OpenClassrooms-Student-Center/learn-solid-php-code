@@ -140,4 +140,3 @@ EOT;
   }
 
 } // fin class Album_Ui
-?>
