@@ -15,7 +15,7 @@
 
 
 /**
- * Autoload.class.php 
+ * Autoload.class.php
  * \brief Sélection dynamique des classes nécessaires à l'application
  * @author Jean-Marc Lecarpentier, Hervé Le Crosnier
  *         Valérie Cauchard, Mickaël Andrieu
@@ -28,7 +28,7 @@
  * des bibliothèques de programmes les contenant.
  *
  * Classes propres à l'appli :NomClasse
- * 
+ *
  * Conventions de nommage : comme pour le
  *  Zend Framework : première lettre capitale,
  *  jamais deux capitales à la suite
@@ -36,30 +36,30 @@
  *
  *********************************************/
 
-function my_autoloader($className) {
-  if (preg_match('#_#', $className)) {
-    $tclass=preg_split('#_#', $className);
-    $obj=$tclass[0];
-  } else {
-    $obj=$className;
-    $tclass=array($obj);
-  }
-
-  $file=LIB_FILE . $obj . "/{$tclass[0]}";
-
-  if (($size = count($tclass)) > 1) {
-    for ($i=1;$i<$size; $i++) {
-      $file .= "_{$tclass[$i]}";
+function my_autoloader($className)
+{
+    if (preg_match('#_#', $className)) {
+        $tclass=preg_split('#_#', $className);
+        $obj=$tclass[0];
+    } else {
+        $obj=$className;
+        $tclass=array($obj);
     }
-  }
-  $file .= ".php";
+
+    $file=LIB_FILE . $obj . "/{$tclass[0]}";
+
+    if (($size = count($tclass)) > 1) {
+        for ($i=1;$i<$size; $i++) {
+            $file .= "_{$tclass[$i]}";
+        }
+    }
+    $file .= ".php";
   
-  if (is_file($file)) {
-    require_once($file);
-  } else {
-    throw new Exception("Erreur Autoload : le fichier {$file} n'existe pas");
-  }
+    if (is_file($file)) {
+        require_once($file);
+    } else {
+        throw new Exception("Erreur Autoload : le fichier {$file} n'existe pas");
+    }
 } // fin de l'autoload
 
 spl_autoload_register('my_autoloader');
-?>

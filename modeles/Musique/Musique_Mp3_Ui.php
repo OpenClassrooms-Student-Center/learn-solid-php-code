@@ -1,38 +1,34 @@
 <?php
-/**
- * Description of Musique_Ui
- *
- * @author mickael.andrieu
- */
-class Musique_Mp3_Ui extends Musique_Ui{
-    
+
+class Musique_Mp3_Ui extends Musique_Ui
+{
     protected $musique;
-    
-    /* Constructeur   */
-    
-    public function __construct(Musique_Mp3 $musique){
+
+    public function __construct(Musique_Mp3 $musique)
+    {
         parent::__construct($musique);
     }
-    
-     /* Méthode afficher : afficher la musique */
-  public function makeHtml() {
-    $titre = $this->musique->getTitre();
-    
-    $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
 
-    $html = <<<EOT
+    public function makeHtml()
+    {
+        $titre = $this->musique->getTitre();
+    
+        $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
+
+        $html = <<<EOT
                 <a data-src="{$fichierSrc}" href="#">{$titre}</a>
     
 EOT;
 
-    return $html;
-  }
+        return $html;
+    }
   
-  public function makePlayer(){
-      $titre = $this->musique->getTitre();
-      $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
+    public function makePlayer()
+    {
+        $titre = $this->musique->getTitre();
+        $fichierSrc = ENTREPOT_URL . $this->musique->getFichier();
       
-      $html = <<<EOT
+        $html = <<<EOT
            <audio src="{$fichierSrc}" preload="auto"></audio>
            <div class="track-details">
                 {$titre}
@@ -46,16 +42,17 @@ EOT;
                 <a href="#" id="vol-100">100%</a>
             </div>
 EOT;
-      return $html;
-  }
+        return $html;
+    }
   
-  public function makeAdminHtml(){
-      $id = $this->musique->getId();
-      $id_album = $this->musique->getIdAlbum();
-      $titre = $this->musique->getTitre();
-      $adminurl = ADMIN_URL;
+    public function makeAdminHtml()
+    {
+        $id = $this->musique->getId();
+        $id_album = $this->musique->getIdAlbum();
+        $titre = $this->musique->getTitre();
+        $adminurl = ADMIN_URL;
       
-      $html = <<<EOT
+        $html = <<<EOT
            <table class='table table-striped'>
                <thead>
                    <tr>
@@ -75,15 +72,16 @@ EOT;
                <a class="btn btn-primary" href="{$adminurl}index.php?a=uploader&amp;id={$id_album}">Ajouter une piste</a>
            </div>
 EOT;
-      return $html;
-  }
+        return $html;
+    }
   
-  public function makeAdminRowHtml(){
-      $id = $this->musique->getId();
-      $titre = $this->musique->getTitre();
-      $adminurl = ADMIN_URL;
+    public function makeAdminRowHtml()
+    {
+        $id = $this->musique->getId();
+        $titre = $this->musique->getTitre();
+        $adminurl = ADMIN_URL;
       
-      $html = <<<EOT
+        $html = <<<EOT
                    <tr>
                        <td>{$titre}</td><td>
                                             <a class="btn" href="{$adminurl}index.php?a=modifier_musique&amp;id={$id}">Modifier <i class="icon-edit icon-white"></i></a>
@@ -91,13 +89,14 @@ EOT;
                                         </td>
                    </tr>
 EOT;
-      return $html;
-  }
+        return $html;
+    }
 
-public function displayModal(){
-      $adminurl = ADMIN_URL;
-      $id = $this->musique->getId();
-      $html= <<<EOT
+    public function displayModal()
+    {
+        $adminurl = ADMIN_URL;
+        $id = $this->musique->getId();
+        $html= <<<EOT
       <div id="deleteModal" class="modal hide fade in" >
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
@@ -113,7 +112,6 @@ public function displayModal(){
                 </div>
             </div>
 EOT;
-  return $html;
-  }
+        return $html;
+    }
 }
-?>

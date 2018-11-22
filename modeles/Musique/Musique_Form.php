@@ -1,36 +1,28 @@
 <?php
-/**
- * Description of Musique_Form
- *
- * @author mickael.andrieu
- */
-class Musique_Form {
+
+class Musique_Form
+{
+    protected $musique;
+    protected $erreurs;
+
+    public function __construct($musique)
+    {
+        $this->erreurs = array(
+               'titre' => '',
+               'fichier' => '',
+        );
+
+        $this->musique = $musique;
+    }
+
+
+    public function makeForm($actionUrl, $invite)
+    {
+        $titre = $this->musique->getTitre();
+        $id = $this->musique->getId();
+        $musique = $this->musique->getFichier();
     
-    /* DonnÃ©es membres de la classe */
-  protected $musique;
-  protected $erreurs; // tableau contenant les erreurs du formulaire 
-
-  /* Constructeur   */
-
-  public function __construct($musique) {
-     /* initialisation du tableau des erreurs */
-    $this->erreurs = array(
-			   'titre' => "",
-			   'fichier' => ""
-			   );
-    /* initialisation du musique */
-    $this->musique = $musique;
-
-  }
-
-
-  public function makeForm($actionUrl,$invite) {
-   
-    $titre = $this->musique->getTitre();
-    $id = $this->musique->getId(); 
-    $musique = $this->musique->getFichier();
-    
-    $text = <<<EOT
+        $text = <<<EOT
 <form class="form-horizontal" action="{$actionUrl}" method="post" enctype="multipart/form-data">
     <div class="controls">
         <label for="fichier">Fichier:</label>
@@ -49,27 +41,20 @@ class Musique_Form {
     </div>
 </form>
 EOT;
-    return $text;
-
-  }
-
-   /* vÃ©rification du formulaire
-   * la mÃ©thode renvoie un boolÃ©en, on pourrait imaginer le faire avec 
-   * une exception mais ce n'est pas mieux
-   */
-  public function verifier($mime) {
-    $flag = true;
-    if ($this->musique->getTitre() == "") {
-      $this->erreurs["titre"] = '<em class="label label-warning">Il faut entrer le titre.</em>';
-      $flag = false;
+        return $text;
     }
-    if (preg_match('$audio/mp3$',$mime)== 0) {
-      $this->erreurs["fichier"] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouv�.</em>' ;
-      $flag = false;
+
+    public function verifier($mime)
+    {
+        $flag = true;
+        if (empty($this->musique->getTitre())) {
+            $this->erreurs["titre"] = '<em class="label label-warning">Il faut entrer le titre.</em>';
+            $flag = false;
+        }
+        if (preg_match('$audio/mp3$', $mime) === 0) {
+            $this->erreurs["fichier"] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>' ;
+            $flag = false;
+        }
+        return $flag;
     }
-    return $flag;
-  }
-
-} // fin class Musique_Form
-
-?>
+}

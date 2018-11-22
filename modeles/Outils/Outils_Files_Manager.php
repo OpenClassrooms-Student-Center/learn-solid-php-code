@@ -10,11 +10,10 @@
  *
  * @author mickael.andrieu
  */
-class Outils_Files_Manager {
-    
-    static public function deleteFile($filename, $path){
+class Outils_Files_Manager
+{
+    public static function deleteFile($filename, $path)
+    {
         unlink($path . $filename);
     }
 }
-
-?>
