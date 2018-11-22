@@ -1,9 +1,5 @@
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d0ec2050-f266-4032-b8ab-3ff2af54e5c6/big.png)](https://insight.sensiolabs.com/projects/d0ec2050-f266-4032-b8ab-3ff2af54e5c6)
-
-A simple application to manage audio albums.
-===============================================
-
-An album can have a sticker in jpeg / png, only mp3 is supported but the Ogg format support is planned.
+A simple PHP application to learn MVC and OOP
+=============================================
 
 Installation:
 -------------
@@ -16,5 +12,5 @@ It's done.
 
 Warnings:
 ---------
-Verify the rights on the 'entrepot' directory.
+Verify the rights on the 'data' directory.
 
