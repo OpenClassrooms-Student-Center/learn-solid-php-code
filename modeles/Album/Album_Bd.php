@@ -1,5 +1,4 @@
 <?php
-use modeles/Album/Album;
 
 class Album_Bd {
 

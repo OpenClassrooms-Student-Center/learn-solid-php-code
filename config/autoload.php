@@ -37,7 +37,6 @@
  *********************************************/
 
 function my_autoloader($className) {
-
   if (preg_match('#_#', $className)) {
     $tclass=preg_split('#_#', $className);
     $obj=$tclass[0];
@@ -45,9 +44,10 @@ function my_autoloader($className) {
     $obj=$className;
     $tclass=array($obj);
   }
-  
+
   $file=LIB_FILE . $obj . "/{$tclass[0]}";
-  if ($size = sizeOf($tclass) >1) {
+
+  if (($size = count($tclass)) > 1) {
     for ($i=1;$i<$size; $i++) {
       $file .= "_{$tclass[$i]}";
     }
@@ -59,7 +59,7 @@ function my_autoloader($className) {
   } else {
     throw new Exception("Erreur Autoload : le fichier {$file} n'existe pas");
   }
-  
-  spl_autoload_register('my_autoloader');
 } // fin de l'autoload
+
+spl_autoload_register('my_autoloader');
 ?>

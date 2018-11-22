@@ -1,7 +1,7 @@
 <?php
 define("SERVER","localhost");
 define("USER","root");
-define("PASSWD","");
+define("PASSWD","password");
 define('DB_NAME', "weplaymusic");
 
 define('PORT', "3306");
