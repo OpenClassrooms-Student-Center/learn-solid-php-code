@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Classes\Outils;
+namespace App\Classes\Tools;
 
-use \PDO;
+use PDO;
 
-class Outils_Bd
+class Database
 {
     private static $instance = false;
 
@@ -25,6 +25,7 @@ class Outils_Bd
         if (self::$instance === false) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 

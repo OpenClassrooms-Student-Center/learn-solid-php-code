@@ -1,34 +1,37 @@
 <?php
+
 require_once '../config/config.php';
+require_once '../config/config_db.php';
+
+require_once '../vendor/autoload.php';
 
 use App\Classes\Album\Album;
-use App\Classes\Album\Album_Bd;
-use App\Classes\Album\Album_Form;
-use App\Classes\Album\Album_Ui;
-use App\Classes\Musique\Musique;
-use App\Classes\Musique\Musique_Bd;
-use App\Classes\Musique\Musique_Form;
-use App\Classes\Musique\Musique_List;
-use App\Classes\Musique\Musique_Ui;
-use App\Classes\Outils\Outils_Bd;
-use App\Classes\Outils\Outils_Chaines;
-use App\Classes\Outils\Outils_Upload;
-use App\Classes\Outils\Outils_Files_Manager;
+use App\Classes\Album\Repository as AlbumRepository;
+use App\Classes\Album\Form as AlbumForm;
+use App\Classes\Album\Ui as AlbumUi;
+use App\Classes\Music\Music;
+use App\Classes\Music\Repository as MusicRepository;
+use App\Classes\Music\Form as MusicForm;
+use App\Classes\Music\Collection as MusicCollection;
+use App\Classes\Music\Ui as MusicUi;
+use App\Classes\Tools\Database;
+use App\Classes\Tools\Strings;
+use App\Classes\Tools\Uploader;
+use App\Classes\Tools\FilesManager;
 
 try {
     $getRequest = $_GET;
     $postRequest = $_POST;
     $fileRequest = $_FILES;
-  
+
     $action = isset($getRequest['a']) ? $getRequest['a'] : '';
 
     // initialisation des variables
-    $titre="";
-    $c="";
-    $header = file_get_contents("../ui/fragments/header.frg.html");
-    $footer = file_get_contents("../ui/fragments/footer.frg.html");
-    $squelette = "../ui/pages/galerie.html.php";
-
+    $title = '';
+    $c = '';
+    $header = file_get_contents('../ui/fragments/header.frg.html');
+    $footer = file_get_contents('../ui/fragments/footer.frg.html');
+    $skeleton = '../ui/pages/galerie.html.php';
 
     /* contrôleur :
      * indique que faire en fonction de l'action demandée
@@ -36,285 +39,286 @@ try {
      */
     switch ($action) {
         case 'ajouter':
-            $titre = "Ajouter un album";
-            $Album = Album::initialize();
-            $form = new Album_Form($Album);
-            $c = $form->makeForm(ADMIN_URL."index.php?a=enregistrernouveau", "ajouter");
+            $title = 'Ajouter un album';
+            $album = Album::initialize();
+            $form = new AlbumForm($album);
+            $c = $form->makeForm(ADMIN_URL . 'index.php?a=enregistrernouveau', 'ajouter');
             $c .= <<<EOT
                 <script type="text/javascript">
                     $('.nav li:eq(0)').attr('class','active');
                 </script>
 EOT;
-        break;
+            break;
 
         case 'modifier':
-            $titre = "Modifier un album";
+            $title = 'Modifier un album';
             if (isset($getRequest['id'])) {
                 $id = $getRequest['id'];
-                $Album = Album_Bd::lire($id);
-                $form = new Album_Form($Album);
-                $c = '<div class="row-fluid show-grid"><div class="span4">'.$form->makeForm(ADMIN_URL."index.php?a=enregistrermodif&amp;id=$id", 'Modifier').'</div>';
+                $album = AlbumRepository::read($id);
+                $form = new AlbumForm($album);
+                $c = '<div class="row-fluid show-grid"><div class="span4">' . $form->makeForm(ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id", 'Modifier') . '</div>';
 
-                $playlist = new Musique_List(Album_Bd::getPlayList($id));
-                $c .= '<div class="span8">'.$playlist->viewHtml().'</div></div>';
+                $playlist = new MusicCollection(AlbumRepository::getPlayList($id));
+                $c .= '<div class="span8">' . $playlist->viewHtml() . '</div></div>';
             } else {
                 $c = "<h3 class='alert'>Echec lors de la modification de l'album</h3>";
             }
 
-        break;
-   
+            break;
+
         case 'enregistrernouveau':
-            $titre = "Création d'album";
-    
-            $data = is_array($postRequest) ? $postRequest : array();
-            $file_data = is_array($fileRequest) ? $fileRequest : array();
-            $data['fichier'] = $data['id'] . $file_data['fichier']['name'];
-            Outils_Chaines::htmlEncodeArray($data);
-            $Album = Album::initialize($data);
-            $form = new Album_Form($Album);
-    
-            if ($form->verifier($file_data['fichier']['type'])) {
-                $titre = 'Album enregistré';
+            $title = "Création d'album";
 
-                $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
-                $ObjFichier->setNom($data['fichier']);
-                $ObjFichier->uploadFichier(DATA_FILE);
-                $ObjFichier->redimensionner(DATA_FILE.'/'.$data['fichier'], DATA_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
-                Album_Bd::enregistrerNouveau($Album);
-        
-                $Album_Ui = new Album_Ui($Album);
-                $c = $Album_Ui->makeTableView();
+            $data = is_array($postRequest) ? $postRequest : array();
+            $fileData = is_array($fileRequest) ? $fileRequest : array();
+            $data['file'] = $data['id'] . $fileData['file']['name'];
+            Strings::htmlEncodeArray($data);
+            $album = Album::initialize($data);
+            $form = new AlbumForm($album);
+
+            if ($form->verify($fileData['file']['type'])) {
+                $title = 'Album enregistré';
+
+                $uploader = new Uploader('file');
+                $uploader->validTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/JPG');
+                $uploader->setName($data['file']);
+                $uploader->uploadFile(DATA_FILE);
+                $uploader->resize(DATA_FILE . '/' . $data['file'], DATA_FILE . '/' . 'tb_' . $data['file'], 150, 150);
+                AlbumRepository::new($album);
+
+                $albumUi = new AlbumUi($album);
+                $c = $albumUi->makeTableView();
             } else {
                 $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
-                $c .= $form->makeForm(ADMIN_URL.'index.php?a=enregistrernouveau', 'ajouter');
+                $c .= $form->makeForm(ADMIN_URL . 'index.php?a=enregistrernouveau', 'ajouter');
             }
 
-        break;
+            break;
 
-    case 'enregistrermodif':
-        $titre = 'Modifications enregistrées';
-        $data = is_array($postRequest) ? $postRequest : array();
-        $file_data = is_array($fileRequest['fichier']) ? $fileRequest['fichier'] : array();
-        if (isset($data['id'])) {
-            $id = $data['id'];
+        case 'enregistrermodif':
+            $title = 'Modifications enregistrées';
+            $data = is_array($postRequest) ? $postRequest : array();
+            $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : array();
 
-            if (!empty($file_data['name'])) {
-                /* attention à ne pas effacer si le nom du nouveau fichier
-                             est identique à son prédecesseur */
-                if ($id . $file_data['name'] == $data['fichier']) {
-                    $case = 1; // On uploade mais on efface pas
+            if (isset($data['id'])) {
+                $id = $data['id'];
+
+                if (!empty($fileData['name'])) {
+                    /* attention à ne pas effacer si le nom du nouveau fichier
+                                 est identique à son prédecesseur */
+                    if ($id . $fileData['name'] == $data['file']) {
+                        $case = 1; // On uploade mais on efface pas
+                    } else {
+                        $case = 2; //On uploade et on efface
+                        $data['file'] = $data['id'] . $fileData['name'];
+                    }
                 } else {
-                    $case = 2; //On uploade et on efface
-                    $data['fichier'] = $data['id'] . $file_data['name'];
+                    $case = 0;
+                    $fileData['type'] = 'image/jpeg';
                 }
-            } else {
-                $case = 0;
-                $file_data['type']= 'image/jpeg';
-            }
 
-            Outils_Chaines::htmlEncodeArray($data);
+                Strings::htmlEncodeArray($data);
 
-            $Album = Album_Bd::lire($id);
+                $album = AlbumRepository::read($id);
 
-            if ($case > 0) {
-                $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->typesValides = array('image/png','image/jpg','image/jpeg','image/JPG');
-                $ObjFichier->setNom($data['fichier']);
-                $ObjFichier->uploadFichier(DATA_FILE);
-                $ObjFichier->redimensionner(DATA_FILE.'/'.$data['fichier'], DATA_FILE.'/'.'tb_'.$data['fichier'], 150, 150);
+                if ($case > 0) {
+                    $uploader = new Uploader('file');
+                    $uploader->validTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/JPG');
+                    $uploader->setName($data['file']);
+                    $uploader->uploadFile(DATA_FILE);
+                    $uploader->resize(DATA_FILE . '/' . $data['file'], DATA_FILE . '/' . 'tb_' . $data['file'], 150, 150);
 
-                if ($case > 1) {
-                    Outils_Files_Manager::deleteFile($Album->getFichier(), DATA_FILE);
-                    Outils_Files_Manager::deleteFile('tb_'.$Album->getFichier(), DATA_FILE);
+                    if ($case > 1) {
+                        FilesManager::deleteFile($album->getFile(), DATA_FILE);
+                        FilesManager::deleteFile('tb_' . $album->getFile(), DATA_FILE);
+                    }
+                }
+
+                $album->update($data);
+                AlbumRepository::update($album);
+                $form = new AlbumForm($album);
+                if ($form->verify($fileData['type'])) {
+                    AlbumRepository::update($album);
+                    $albumUi = new AlbumUi($album);
+                    $c = $albumUi->makeHtml();
+                } else {
+                    $title = 'Echec de modification';
+                    $c = $form->makeForm(ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id", 'modifier');
                 }
             }
-         
-            $Album->update($data);
-            Album_Bd::enregistrerModif($Album);
-            $form = new Album_Form($Album);
-            if ($form->verifier($file_data['type'])) {
-                Album_Bd::enregistrerModif($Album);
-                $Album_display = new Album_Ui($Album);
-                $c = $Album_display->makeHtml();
-            } else {
-                $titre = "Echec de modification";
-                $c = $form->makeForm(ADMIN_URL."index.php?a=enregistrermodif&amp;id=$id", 'modifier');
-            }
-        }
-    break;
+            break;
 
-    case 'supprimer':
-        $titre = 'Album supprimé';
-        $id = $getRequest['id'];
-        $Album = Album_Bd::lire($id);
-        Album_Bd::supprimer($Album);
-        Outils_Files_Manager::deleteFile($Album->getFichier(), DATA_FILE);
-        Outils_Files_Manager::deleteFile('tb_'.$Album->getFichier(), DATA_FILE);
-        $ListOfMusics = Album_Bd::getPlayList($id);
-
-        foreach ($ListOfMusics as $Music) {
-            Outils_Files_Manager::deleteFile($Music->getFichier(), DATA_FILE);
-        }
-
-    break;
-
-/* Gestion des pistes */
-
-    case 'uploader':
-        $titre = "Upload d'un titre";
-        if (isset($getRequest['id'])) {
-            $id_album = $getRequest['id'];
-
-            $Musique = Musique::initialize();
-            $form = new Musique_Form($Musique);
-            $c = $form->makeForm(ADMIN_URL."index.php?a=ajouter_musique&amp;id_album=$id_album", "ajouter une piste");
-        }
-    break;
-
-    case 'ajouter_musique':
-        if (isset($getRequest['id_album'])) {
-            if (! $fileRequest['fichier']['error'] == 0) {
-                throw new Exception("Problème d'upload, contactez un administrateur...");
-                /* en cas de fichier corrompu ou trop gros */
-            }
-
-            $data = is_array($postRequest) ? $postRequest : array();
-            $file_data = is_array($fileRequest) ? $fileRequest : array();
-            
-            $data['id_album'] = $getRequest['id_album'];
-            $data['fichier'] = $data['id_album'] . $file_data['fichier']['name'];
-            Outils_Chaines::htmlEncodeArray($data);
-
-            $Musique = Musique::initialize($data);
-            $form = new Musique_Form($Musique);
-            if ($form->verifier($file_data['fichier']['type'])) {
-                $titre = "Piste enregistrée";
-
-                $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->typesValides = array('audio/mp3');
-                $ObjFichier->setNom($data['fichier']);
-                $ObjFichier->uploadFichier(DATA_FILE);
-
-                Musique_Bd::enregistrerNouveau($Musique);
-                $Musique_Ui = Musique_Ui::factory($Musique);
-                $c = $Musique_Ui->makeAdminHtml();
-            } else {
-                $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
-                $id_album = $data['id_album'];
-                $c .= $form->makeForm(ADMIN_URL."index.php?a=ajouter_musique&amp;id_album=$id_album", "ajouter une piste");
-            }
-        }
-    break;
-
-    case 'modifier_musique':
-       $titre = 'Modifier une Musique';
-        if (isset($getRequest['id'])) {
+        case 'supprimer':
+            $title = 'Album supprimé';
             $id = $getRequest['id'];
-            $Musique = Musique_Bd::lire($id);
-            $form = new Musique_Form($Musique);
-            $c = $form->makeForm(ADMIN_URL."index.php?a=modifier_musique_modif&amp;id=$id", 'Modifier');
-        } else {
-            $c = "<h3 class='alert'>Echec lors de la modification de la Musique</h3>";
-        }
-    break;
+            $album = AlbumRepository::read($id);
+            AlbumRepository::delete($album);
+            FilesManager::deleteFile($album->getFile(), DATA_FILE);
+            FilesManager::deleteFile('tb_' . $album->getFile(), DATA_FILE);
+            $listOfMusics = AlbumRepository::getPlayList($id);
 
-    case 'modifier_musique_modif':
-        $titre = 'Modifications enregistrées';
-        $data = is_array($postRequest) ? $postRequest : array();
-        $file_data = is_array($fileRequest['fichier']) ? $fileRequest['fichier'] : array();
-        if (isset($data['id'])) {
-            $id = $data['id'];
+            foreach ($listOfMusics as $music) {
+                FilesManager::deleteFile($music->getFile(), DATA_FILE);
+            }
 
-            if (!empty($file_data['name'])) {
-                /* attention à ne pas effacer si le nom du nouveau fichier est identique à son prédecesseur */
-                if ($id . $file_data['name'] == $data['fichier']) {
-                    $case = 1; // On uploade mais on efface pas
+            break;
+
+        /* Gestion des pistes */
+
+        case 'uploader':
+            $title = "Upload d'un titre";
+            if (isset($getRequest['id'])) {
+                $albumId = $getRequest['id'];
+
+                $music = Music::initialize();
+                $form = new MusicForm($music);
+                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;id_album=$albumId", 'ajouter une piste');
+            }
+            break;
+
+        case 'ajouter_musique':
+            if (isset($getRequest['id_album'])) {
+                if (!$fileRequest['fichier']['error'] == 0) {
+                    throw new Exception("Problème d'upload, contactez un administrateur...");
+                    /* en cas de fichier corrompu ou trop gros */
+                }
+
+                $data = is_array($postRequest) ? $postRequest : array();
+                $fileData = is_array($fileRequest) ? $fileRequest : array();
+
+                $data['id_album'] = $getRequest['id_album'];
+                $data['file'] = $data['id_album'] . $fileData['file']['name'];
+                Strings::htmlEncodeArray($data);
+
+                $music = Music::initialize($data);
+                $form = new MusicForm($Musmusicique);
+                if ($form->verify($file_data['file']['type'])) {
+                    $title = 'Piste enregistrée';
+
+                    $uploader = new Uploader('fichier');
+                    $uploader->validTypes = array('audio/mp3');
+                    $uploader->setName($data['fichier']);
+                    $uploader->uploadFile(DATA_FILE);
+
+                    MusicRepository::new($music);
+                    $musicUi = MusicUi::factory($music);
+                    $c = $musicUi->makeAdminHtml();
                 } else {
-                    $case = 2; //On uploade et on efface
-                    $data['fichier'] = $data['id'] . $file_data['name'];
-                }
-            } else {
-                $case = 0;
-                $file_data['type']= 'audio/mpeg';
-            }
-            Outils_Chaines::htmlEncodeArray($data);
-
-            $Musique = Musique_Bd::lire($id);
-            /* mettre à jour avec les données du formulaire, impose de redownloader l'image? */
-            if ($case >0) {
-                //Si nouveau, alors upload/redimensionnement de la nouvelle image
-                $ObjFichier = new Outils_Upload('fichier');
-                $ObjFichier->TypesValides = array('audio/ogg','audio/mpeg');
-                $ObjFichier->setNom($data['fichier']);
-                $ObjFichier->uploadFichier(DATA_FILE);
-                if ($case > 1) {
-                    Outils_Files_Manager::deleteFile($Musique->getFichier(), DATA_FILE);
+                    $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
+                    $albumId = $data['id_album'];
+                    $c .= $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;id_album=$albumId", 'ajouter une piste');
                 }
             }
+            break;
 
-            $Musique->update($data);
-            Musique_Bd::enregistrerModif($Musique);
-            $form = new Musique_Form($Musique);
-            if ($form->verifier($file_data['type'])) {
-                Musique_Bd::enregistrerModif($Musique);
-                $Musique_display = Musique_Ui::factory($Musique);
-                $c = $Musique_display->makeHtml();
+        case 'modifier_musique':
+            $title = 'Modifier une Musique';
+            if (isset($getRequest['id'])) {
+                $id = $getRequest['id'];
+                $music = MusicRepository::read($id);
+                $form = new MusicForm($music);
+                $c = $form->makeForm(ADMIN_URL . "index.php?a=modifier_musique_modif&amp;id=$id", 'Modifier');
             } else {
-                $titre = "Echec de modification";
-                $c = $form->makeForm(ADMIN_URL."index.php?a=modifier_musique_modif&amp;id=$id", 'modifier');
+                $c = "<h3 class='alert'>Echec lors de la modification de la Musique</h3>";
             }
-        }
-    break;
+            break;
 
-    case "supprimer_musique":
-        $titre = "Musique supprimée";
-        $id = $getRequest['id'];
-        $Music = Musique_Bd::lire($id);
-        Musique_Bd::supprimer($Music);
-        Outils_Files_Manager::deleteFile($Music->getFichier(), DATA_FILE);
-    break;
+        case 'modifier_musique_modif':
+            $title = 'Modifications enregistrées';
+            $data = is_array($postRequest) ? $postRequest : array();
+            $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : array();
+            if (isset($data['id'])) {
+                $id = $data['id'];
 
-    // Page d'administration : affiche tous les Albums de la BD
-    default:
-        $titre = "Module d'administration des Albums";
+                if (!empty($fileData['name'])) {
+                    /* attention à ne pas effacer si le nom du nouveau fichier est identique à son prédecesseur */
+                    if ($id . $fileData['name'] == $data['ficfilehier']) {
+                        $case = 1; // On uploade mais on efface pas
+                    } else {
+                        $case = 2; //On uploade et on efface
+                        $data['file'] = $data['id'] . $fileData['name'];
+                    }
+                } else {
+                    $case = 0;
+                    $fileData['type'] = 'audio/mpeg';
+                }
+                Strings::htmlEncodeArray($data);
 
-        $req = "select * from tp_upload order by dateIns DESC";
-        $db = Outils_Bd::getInstance()->getConnexion();
+                $music = MusicRepository::read($id);
+                /* mettre à jour avec les données du formulaire, impose de redownloader l'image? */
+                if ($case > 0) {
+                    //Si nouveau, alors upload/redimensionnement de la nouvelle image
+                    $uploader = new Uploader('fichier');
+                    $uploader->validTypes = array('audio/ogg', 'audio/mpeg');
+                    $uploader->setName($data['fichier']);
+                    $uploader->uploadFile(DATA_FILE);
+                    if ($case > 1) {
+                        FileManager::deleteFile($music->getFile(), DATA_FILE);
+                    }
+                }
 
-        $res = $db->query($req);
-        $tableau = $res->fetchAll(PDO::FETCH_ASSOC);
-        /* Traiter les résultats de la requête pour chaque ligne de résultat */
-        $c = '<table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Vignette</th>
-                <th>Actions</th>
-           </tr>
-        </thead>';
+                $music->update($data);
+                MusicRepository::update($music);
+                $form = new MusicForm($music);
+                if ($form->verifier($fileData['type'])) {
+                    MusicRepository::update($music);
+                    $Musique_display = MusicUi::factory($music);
+                    $c = $Musique_display->makeHtml();
+                } else {
+                    $titre = 'Echec de modification';
+                    $c = $form->makeForm(ADMIN_URL . "index.php?a=modifier_musique_modif&amp;id=$id", 'modifier');
+                }
+            }
+            break;
 
-        foreach ($tableau as $line) {
-            $Album = Album::initialize($line);
-            $ui = new Album_Ui($Album);
-            $c .= $ui->makeHtmlAdmin();
-            $c .= $ui->displayModal();
-        }
-        $c .= '</table>';
-        $c .= <<<EOT
-            <script type="text/javascript">
-                $('.nav li:eq(1)').attr('class','active');
-            </script>
+        case 'supprimer_musique':
+            $title = 'Musique supprimée';
+            $id = $getRequest['id'];
+            $Music = MusicRepository::read($id);
+            MusicRepository::delete($Music);
+            FileManager::deleteFile($Music->getFichier(), DATA_FILE);
+            break;
+
+        // Page d'administration : affiche tous les Albums de la BD
+        default:
+            $title = "Module d'administration des Albums";
+
+            $sqlQuery = 'select * from albums order by created_at DESC';
+            $db = Database::getInstance()->getConnexion();
+
+            $stmt = $db->query($sqlQuery);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            /* Traiter les résultats de la requête pour chaque ligne de résultat */
+            $c = '<table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteur</th>
+                    <th>Vignette</th>
+                    <th>Actions</th>
+            </tr>
+            </thead>';
+
+            foreach ($results as $line) {
+                $album = Album::initialize($line);
+                $albumUi = new AlbumUi($album);
+                $c .= $albumUi->makeHtmlAdmin();
+                $c .= $albumUi->displayModal();
+            }
+            $c .= '</table>';
+            $c .= <<<EOT
+                <script type="text/javascript">
+                    $('.nav li:eq(1)').attr('class','active');
+                </script>
 EOT;
-      }
+    }
 } catch (Exception $e) {
     $c = $e->getMessage();
     $c .= "<pre>{$e->getTraceAsString()}</pre>";
 }
 
 ob_start();
-  require_once($squelette);
-  $html = ob_get_contents();
+    require_once $skeleton;
+    $html = ob_get_contents();
 ob_end_clean();
 echo $html;

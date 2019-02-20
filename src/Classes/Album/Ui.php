@@ -2,7 +2,7 @@
 
 namespace App\Classes\Album;
 
-class Album_Ui
+class Ui
 {
     protected $album;
 
@@ -16,7 +16,7 @@ class Album_Ui
         $publicurl = PUBLIC_URL;
         $id = $this->album->getId();
         $titre = $this->album->getTitre();
-        $fichierSrc = DATA_URL . 'tb_'. $this->album->getFichier();
+        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
         $html = <<<EOT
 <div class="album">
     <a href="{$publicurl}index.php?a=ecouter&amp;id={$id}"><img src="{$fichierSrc}" alt="{$titre}" /></a>
@@ -25,14 +25,14 @@ EOT;
 
         return $html;
     }
-  
+
     public function makeRowView()
     {
         $id = $this->album->getId();
         $titre = $this->album->getTitre();
         $auteur = $this->album->getAuteur();
         $publicurl = PUBLIC_URL;
-     
+
         $html = <<<EOT
        <tr>
             <td>{$titre}</td>
@@ -40,15 +40,16 @@ EOT;
             <td><a class="btn" href="{$publicurl}index.php?a=ecouter&amp;id={$id}">Ecouter <i class="icon-headphones icon-white"></i></a></td>
        </tr>
 EOT;
+
         return $html;
     }
-  
+
     public function makeTableView()
     {
         $titre = $this->album->getTitre();
         $auteur = $this->album->getAuteur();
-        $fichierSrc = DATA_URL .'tb_'. $this->album->getFichier();
-     
+        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
+
         $html = <<<EOT
      
    <table class='table table-striped'>
@@ -68,17 +69,18 @@ EOT;
        </tbody>
    </table>
 EOT;
+
         return $html;
     }
-  
+
     public function makeHtmlAdmin()
     {
         $adminurl = ADMIN_URL;
         $id = $this->album->getId();
         $titre = $this->album->getTitre();
         $auteur = $this->album->getAuteur();
-        $fichierSrc = DATA_URL .'tb_'. $this->album->getFichier();
-    
+        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
+
         $htmlCode = <<<EOT
       <tr>
         <td>{$titre}</td>
@@ -96,12 +98,12 @@ EOT;
 
         return $htmlCode;
     }
-  
+
     public function displayModal()
     {
         $adminurl = ADMIN_URL;
         $id = $this->album->getId();
-        $html= <<<EOT
+        $html = <<<EOT
       <div id="deleteModal" class="modal hide fade in" >
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
@@ -117,8 +119,10 @@ EOT;
                 </div>
             </div>
 EOT;
+
         return $html;
     }
+
     public function displayAlbumInfos()
     {
         $auteur = $this->album->getAuteur();

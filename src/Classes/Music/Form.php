@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Classes\Musique;
+namespace App\Classes\Music;
 
-class Musique_Form
+class Form
 {
     protected $musique;
     protected $erreurs;
@@ -17,24 +17,23 @@ class Musique_Form
         $this->musique = $musique;
     }
 
-
     public function makeForm($actionUrl, $invite)
     {
         $titre = $this->musique->getTitre();
         $id = $this->musique->getId();
         $musique = $this->musique->getFichier();
-    
+
         $text = <<<EOT
 <form class="form-horizontal" action="{$actionUrl}" method="post" enctype="multipart/form-data">
     <div class="controls">
         <label for="fichier">Fichier:</label>
         <input type="file" id="fichier" onchange="filesInputHandler(this.files,'titre')"  name="fichier" value="{$musique}" />
-        <span class="help-inline">{$this->erreurs["fichier"]}</span>
+        <span class="help-inline">{$this->erreurs['fichier']}</span>
     </div>
     <div class="controls">
         <label for="titre">Titre :</label>
         <input type="text" id="titre"  name="titre" value="{$titre}" />
-        <span class="help-inline">{$this->erreurs["titre"]}</span>
+        <span class="help-inline">{$this->erreurs['titre']}</span>
     </div>
     <div class="submit form-actions">
         <input type="hidden" name="id" value="{$id}" />
@@ -43,6 +42,7 @@ class Musique_Form
     </div>
 </form>
 EOT;
+
         return $text;
     }
 
@@ -50,13 +50,14 @@ EOT;
     {
         $flag = true;
         if (empty($this->musique->getTitre())) {
-            $this->erreurs["titre"] = '<em class="label label-warning">Il faut entrer le titre.</em>';
+            $this->erreurs['titre'] = '<em class="label label-warning">Il faut entrer le titre.</em>';
             $flag = false;
         }
         if (preg_match('$audio/mp3$', $mime) === 0) {
-            $this->erreurs["fichier"] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>' ;
+            $this->erreurs['fichier'] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>';
             $flag = false;
         }
+
         return $flag;
     }
 }
