@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Classes\Outils;
+namespace App\Classes\Tools;
 
-class Outils_Files_Manager
+class FilesManager
 {
     public static function deleteFile($filename, $path)
     {

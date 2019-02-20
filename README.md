@@ -13,4 +13,3 @@ It's done.
 Warnings:
 ---------
 Verify the rights on the 'data' directory.
-

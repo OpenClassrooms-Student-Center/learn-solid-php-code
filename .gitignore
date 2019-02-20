@@ -1,4 +1,7 @@
-.idea/
 config/config.php
 
 /vendor/
+
+build/
+
+.php_cs.cache

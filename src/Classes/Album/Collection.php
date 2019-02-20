@@ -2,35 +2,35 @@
 
 namespace App\Classes\Album;
 
-class Album_List
+class Collection
 {
-    private $list_of_albums;
-    
-    public function __construct($list_of_albums)
+    private $albumCollection;
+
+    public function __construct($albumCollection)
     {
-        $this->list_of_albums = $list_of_albums;
+        $this->albumCollection = $albumCollection;
     }
-    
+
     public function viewHtml()
     {
-        $html ='<section class="list_carousel">
+        $html = '<section class="list_carousel">
                     <ul id="carousel">';
-        foreach ($this->list_of_albums as $album) {
-            $album_ui = new Album_Ui($album);
-            $html .= '<li>'. $album_ui->makeHtml() .'</li>';
+        foreach ($this->albumCollection as $album) {
+            $ui = new Ui($album);
+            $html .= '<li>' . $ui->makeHtml() . '</li>';
         }
         $html .= '</ul>
                                 <div class="clearfix"></div>
                                 <a id="prev" class="prev" href="#"></a>
                                 <a id="next" class="next" href="#"></a>
                                 </section>';
-        
+
         return $html;
     }
-    
+
     public function viewTable()
     {
-        $html ='<h2>Liste de tous les Albums</h2>
+        $html = '<h2>Liste de tous les Albums</h2>
             <table class="table table-striped">
                     <thead>
                       <tr>
@@ -38,12 +38,12 @@ class Album_List
                       </tr>
                       </thead>
                       <tbody>';
-        foreach ($this->list_of_albums as $album) {
-            $album_ui = new Album_Ui($album);
-            $html .= $album_ui->makeRowView();
+        foreach ($this->albumCollection as $album) {
+            $ui = new Ui($album);
+            $html .= $ui->makeRowView();
         }
         $html .= '</tbody></table>';
-        
+
         return $html;
     }
 }

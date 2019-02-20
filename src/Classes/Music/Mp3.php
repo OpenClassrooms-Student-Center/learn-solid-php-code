@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Classes\Musique;
+namespace App\Classes\Music;
 
-class Musique_Mp3 extends Musique
+class Mp3 extends Musique
 {
     public function __construct($map)
     {

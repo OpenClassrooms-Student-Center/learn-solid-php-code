@@ -5,20 +5,19 @@ namespace App\Classes\Album;
 class Album
 {
     private $id;
-    private $titre;
-    private $auteur;
-    private $fichier;
-    private $dateIns;
+    private $title;
+    private $author;
+    private $file;
+    private $createdAt;
 
     protected function __construct($map)
     {
         $this->id = $map['id'];
-        $this->titre = $map['titre'];
-        $this->auteur = $map['auteur'];
-        $this->fichier = $map['fichier'];
-        $this->dateIns = $map['dateIns'];
+        $this->title = $map['title'];
+        $this->author = $map['author'];
+        $this->file = $map['file'];
+        $this->createdAt = $map['created_at'];
     }
-
 
     public static function initialize($data = array())
     {
@@ -27,47 +26,43 @@ class Album
         } else {
             $map['id'] = md5(microtime());
         }
-        if (isset($data['titre'])) {
-            $map['titre'] = $data['titre'];
+        if (isset($data['title'])) {
+            $map['title'] = $data['title'];
         } else {
-            $map['titre'] = '';
+            $map['title'] = '';
         }
-        if (isset($data['auteur'])) {
-            $map['auteur'] = $data['auteur'];
+        if (isset($data['author'])) {
+            $map['author'] = $data['author'];
         } else {
-            $map['auteur']= '';
+            $map['author'] = '';
         }
-        if (isset($data['fichier'])) {
-            $map['fichier']= $data['fichier'];
+        if (isset($data['file'])) {
+            $map['file'] = $data['file'];
         } else {
-            $map['fichier']= '';
+            $map['file'] = '';
         }
-        if (isset($data['dateIns'])) {
-            $map['dateIns'] = $data['dateIns'];
+        if (isset($data['created_at'])) {
+            $map['created_at'] = $data['created_at'];
         } else {
-            $map['dateIns']= date("Y-m-d H:i:s");
+            $map['created_at'] = date('Y-m-d H:i:s');
         }
 
         return new self($map);
     }
 
-
     public function update($updateData)
     {
-        if (isset($updateData['titre'])) {
-            $this->titre = $updateData['titre'];
+        if (isset($updateData['title'])) {
+            $this->titre = $updateData['title'];
         }
-        if (isset($updateData['auteur'])) {
-            $this->auteur = $updateData['auteur'];
+        if (isset($updateData['author'])) {
+            $this->author = $updateData['author'];
         }
-        if (isset($updateData['fichier'])) {
-            $this->fichier = $updateData['fichier'];
+        if (isset($updateData['file'])) {
+            $this->file = $updateData['file'];
         }
     }
 
-
-
- 
     /**
      * Retourne le code d'identification d'un album
      */
@@ -76,42 +71,36 @@ class Album
         return $this->id;
     }
 
-
     /**
      * Retourne le nom du site
      */
-    public function getTitre()
+    public function getTitle()
     {
-        return $this->titre;
+        return $this->title;
     }
-
-
 
     /**
      * Retourne la auteur
      */
-    public function getAuteur()
+    public function getAuthor()
     {
-        return $this->auteur;
+        return $this->author;
     }
-
 
     /**
      * Retourne le fichier
      */
-    public function getFichier()
+    public function getFile()
     {
-        return $this->fichier;
+        return $this->file;
     }
-
 
     /**
      * Retourne la date de création
      */
-
-    public function getDateIns()
+    public function getCreatedAt()
     {
-        return $this->dateIns;
+        return $this->createdAt;
     }
 
     /**
@@ -122,40 +111,35 @@ class Album
         $this->id = $id;
     }
 
-
     /**
      * Modifie le nom du site
      */
-    public function setTitre($titre)
+    public function setTitle($title)
     {
-        $this->titre = $titre;
+        $this->title = $title;
     }
-
-
 
     /**
      * Modifie la auteur de l'album
      */
-    public function setAuteur($auteur)
+    public function setAuthor($author)
     {
-        $this->auteur = $auteur;
+        $this->author = $author;
     }
-
 
     /**
      * Modifie le fichier
      */
-    public function setFichier($fichier)
+    public function setFile($file)
     {
-        $this->fichier = $fichier;
+        $this->file = $file;
     }
-
 
     /**
      * Modifie la date
      */
-    public function setDateIns($dateIns)
+    public function setCreatedAt($createdAt)
     {
-        $this->dateIns = $dateIns;
+        $this->createdAt = $createdAt;
     }
 }
