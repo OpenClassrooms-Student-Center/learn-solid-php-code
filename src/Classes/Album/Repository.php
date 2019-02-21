@@ -3,6 +3,7 @@
 namespace App\Classes\Album;
 
 use App\Classes\Tools\Database;
+use App\Classes\Music\Music;
 use PDO;
 
 class Repository

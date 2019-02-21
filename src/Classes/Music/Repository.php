@@ -18,41 +18,35 @@ class Repository
         return Music::initialize($ligne);
     }
 
-    public static function enregistrerNouveau(Musique $musique)
+    public static function new(Music $music)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('insert into songs set id=:id,titre=:titre,fichier=:fichier,id_album=:id_album');
 
-        $data = array(
-            'id' => $musique->getId(),
-            'titre' => $musique->getTitre(),
-                    'fichier' => $musique->getFichier(),
-            'id_album' => $musique->getIdAlbum(),
-        );
-
-        $sth->execute($data);
+        $sth->execute([
+            'id' => $music->getId(),
+            'title' => $music->getTitle(),
+            'file' => $music->getFile(),
+            'album_id' => $music->getAlbumId(),
+        ]);
     }
 
-    public static function enregistrerModif(Musique $musique)
+    public static function update(Music $music)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('update songs set titre=:titre where id=:id');
 
-        $data = array(
-            'id' => $musique->getId(),
-            'titre' => $musique->getTitre(),
-        );
-
-        $sth->execute($data);
+        $sth->execute([
+            'id' => $music->getId(),
+            'title' => $music->getTitle(),
+        ]);
     }
 
-    public static function supprimer(Musique $musique)
+    public static function delete(Music $music)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('delete from songs where id=:id');
 
-        $data = array('id' => $musique->getId());
-
-        $sth->execute($data);
+        $sth->execute(['id' => $music->getId()]);
     }
 }

@@ -17,7 +17,7 @@ class Music
         $this->file = $map['file'];
     }
 
-    public function initialize($data = array())
+    public static function initialize($data = array())
     {
         if (isset($data['id'])) {
             $map['id'] = $data['id'];
@@ -59,8 +59,8 @@ class Music
 
     public function update($updateData)
     {
-        if (isset($updateData['titre'])) {
-            $this->titre = $updateData['titre'];
+        if (isset($updateData['title'])) {
+            $this->title = $updateData['title'];
         }
     }
 

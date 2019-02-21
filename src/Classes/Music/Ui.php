@@ -2,19 +2,23 @@
 
 namespace App\Classes\Music;
 
+use Exception;
+
 class Ui
 {
-    public function __construct($musique)
+    private $music;
+
+    public function __construct($music)
     {
-        $this->musique = $musique;
+        $this->music = $music;
     }
 
-    public static function factory(Music $musique)
+    public static function factory(Music $music)
     {
-        $extension = pathinfo($musique->getFichier(), PATHINFO_EXTENSION);
+        $extension = pathinfo($music->getFile(), PATHINFO_EXTENSION);
         switch ($extension) {
             case 'mp3':
-                return new Mp3Ui($musique);
+                return new Mp3Ui($music);
                 break;
             case 'ogg':
                 break;

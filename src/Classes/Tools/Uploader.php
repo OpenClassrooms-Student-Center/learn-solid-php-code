@@ -84,26 +84,26 @@ class Uploader
 
         $image = $function($origin);
 
-        $imageWidth = imagesx($image);
+        $imageWidth = \imagesx($image);
         if ($imageWidth < $width) {
             if (!copy($origin, $destination)) {
                 throw new Exception("Impossible de copier le fichier {$origin} vers {$destination}");
             }
         } else {
-            $imageHeight = imagesy($image);
+            $imageHeight = \imagesy($image);
             $height = (int) (($width * $imageHeight) / $imageWidth);
             if ($height > $maxHeight) {
                 $height = $maxHeight;
                 $width = (int) (($height * $imageWidth) / $imageHeight);
             }
-            $newImage = imagecreatetruecolor($width, $height);
-            imagecopyresampled($newImage, $image, 0, 0, 0, 0, $width, $height, $imageWidth, $imageHeight);
+            $newImage = \imagecreatetruecolor($width, $height);
+            \imagecopyresampled($newImage, $image, 0, 0, 0, 0, $width, $height, $imageWidth, $imageHeight);
 
             $function = 'image' . $type;
             $function($newImage, $destination);
 
-            imagedestroy($newImage);
-            imagedestroy($image);
+            \imagedestroy($newImage);
+            \imagedestroy($image);
         }
     }
 }
