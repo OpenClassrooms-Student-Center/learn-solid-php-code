@@ -53,7 +53,7 @@ class Album
     public function update($updateData)
     {
         if (isset($updateData['title'])) {
-            $this->titre = $updateData['title'];
+            $this->title = $updateData['title'];
         }
         if (isset($updateData['author'])) {
             $this->author = $updateData['author'];

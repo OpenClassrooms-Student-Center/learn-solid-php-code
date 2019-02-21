@@ -58,7 +58,7 @@ class Strings
      * @param $string string to encode
      * @param $charset character encoding, optionnal (defaults to utf-8)
      *
-     * @return encoded tring
+     * @return string an encoded string
      */
     public static function htmlEncodeString($string, $charset = 'utf-8')
     {
@@ -99,7 +99,7 @@ class Strings
         while (list($k) = each($tab)) {
             if (!is_array($tab[$k])) {
                 if (!in_array($k, $htmlOk)) {
-                    $tab[$k] = Outils_Chaines::htmlEncodeString($tab[$k]);
+                    $tab[$k] = Strings::htmlEncodeString($tab[$k]);
                 }
             } else {
                 if (in_array($k, $htmlOk)) {
