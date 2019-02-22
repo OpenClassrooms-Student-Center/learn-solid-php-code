@@ -39,26 +39,26 @@ class Form
         $form = <<<EOT
 <form action="{$actionUrl}" method="post" enctype="multipart/form-data">
 <div class="controls">
-    <label for="fichier">Fichier:</label>
-    <input type="file" id="fichier" onchange="filesInputHandler(this.files,'titre')" name="fichier" value="{$file}" />
-    <span class="help-inline warning">{$this->errors['fichier']}</span>
+    <label for="file">Fichier:</label>
+    <input type="file" id="file" onchange="filesInputHandler(this.files,'title')" name="file" value="{$file}" />
+    <span class="help-inline warning">{$this->errors['file']}</span>
 </div>
 <div class="controls">
-    <label for="titre">Titre :</label><span>
-    <input type="text" id="titre"  name="titre" value="{$title}" />
-    <span class="help-inline">{$this->errors['titre']}</span>
+    <label for="title">Titre :</label><span>
+    <input type="text" id="title"  name="title" value="{$title}" />
+    <span class="help-inline">{$this->errors['title']}</span>
 </div>
 <div class="controls">
-     <label for="auteur">Auteur :</label><span>
-     <input type="text" id="auteur" name="auteur" value="{$author}" />
-     <span class="help-inline warning">{$this->errors['auteur']}</span>
+     <label for="author">Auteur :</label><span>
+     <input type="text" id="author" name="author" value="{$author}" />
+     <span class="help-inline warning">{$this->errors['author']}</span>
 </div>
 <div class="controls">
     {$picture}
 </div>
 <div class="submit form-actions">
     <input type="hidden" name="id" value="{$id}" />
-    <input type="hidden" name="fichier" value="{$file}" />
+    <input type="hidden" name="file" value="{$file}" />
     <button class="btn btn-primary" type="submit" name="go">{$invite}</button>
 </div>
 </form>
@@ -75,7 +75,7 @@ EOT;
             $this->errors['title'] = '<em class="label label-warning">Il faut entrer le titre.</em>';
             $flag = false;
         }
-        if ($this->album->getAuthor() == '' && !preg_match('#\w#', $this->album->getAuteur())) {
+        if ($this->album->getAuthor() == '' && !preg_match('#\w#', $this->album->getAuthor())) {
             $this->errors['author'] = '<em class="label label-warning">Il faut entrer la auteur.</em>';
             $flag = false;
         }

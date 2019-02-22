@@ -7,21 +7,21 @@ use PDO;
 
 class Repository
 {
-    public static function lire($id)
+    public static function read($id)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('SELECT * FROM songs WHERE id=:id');
         $data = array('id' => $id);
         $sth->execute($data);
-        $ligne = $sth->fetch(PDO::FETCH_ASSOC);
+        $musicResult = $sth->fetch(PDO::FETCH_ASSOC);
 
-        return Music::initialize($ligne);
+        return Music::initialize($musicResult);
     }
 
     public static function new(Music $music)
     {
         $db = Database::getInstance()->getConnexion();
-        $sth = $db->prepare('insert into songs set id=:id,titre=:titre,fichier=:fichier,id_album=:id_album');
+        $sth = $db->prepare('insert into songs set id=:id,title=:title,file=:file,id_album=:album_id');
 
         $sth->execute([
             'id' => $music->getId(),

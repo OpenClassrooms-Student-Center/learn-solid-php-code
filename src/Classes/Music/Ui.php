@@ -6,7 +6,7 @@ use Exception;
 
 class Ui
 {
-    private $music;
+    protected $music;
 
     public function __construct($music)
     {
