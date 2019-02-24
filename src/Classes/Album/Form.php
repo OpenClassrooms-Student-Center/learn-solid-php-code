@@ -24,7 +24,7 @@ class Form
         $author = $this->album->getAuthor();
         $id = $this->album->getId();
         $file = $this->album->getFile();
-        if ($this->album->getFile() != '') {
+        if (!empty($this->album->getFile())) {
             $fileSource = DATA_URL . 'tb_' . $this->album->getFile();
             $picture = " <img src=\"{$fileSource}\" alt=\"{$title}\" style=\"margin: 10px 10px; margin-left: 35px; \" />";
         } else {
@@ -40,7 +40,7 @@ class Form
 <form action="{$actionUrl}" method="post" enctype="multipart/form-data">
 <div class="controls">
     <label for="file">Fichier:</label>
-    <input type="file" id="file" onchange="filesInputHandler(this.files,'title')" name="file" value="{$file}" />
+    <input type="file" id="file" onchange="filesInputHandler(this.files,'title')" name="file" value="{$file}">
     <span class="help-inline warning">{$this->errors['file']}</span>
 </div>
 <div class="controls">
@@ -57,8 +57,6 @@ class Form
     {$picture}
 </div>
 <div class="submit form-actions">
-    <input type="hidden" name="id" value="{$id}" />
-    <input type="hidden" name="file" value="{$file}" />
     <button class="btn btn-primary" type="submit" name="go">{$invite}</button>
 </div>
 </form>
