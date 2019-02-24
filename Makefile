@@ -12,7 +12,7 @@ check: ## Execute all quality assurance tools
 csfixer: ## Run the PHP coding standards fixer on apply mode
 	@test -f .php_cs || cp .php_cs.dist .php_cs && \
 	php vendor/bin/php-cs-fixer fix --config=.php_cs \
-		--cache-file=php_cs.cache --verbose
+		--cache-file=.php_cs.cache --verbose
 
 phpstan: ## Run the PHP static analysis tool at level max
 	php ./vendor/bin/phpstan analyse -l max -c phpstan.neon src admin public
