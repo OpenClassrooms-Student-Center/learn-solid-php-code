@@ -172,13 +172,13 @@ EOT;
 
                 $music = Music::initialize();
                 $form = new MusicForm($music);
-                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;id_album=$albumId", 'ajouter une piste');
+                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'ajouter une piste');
             }
             break;
 
         case 'ajouter_musique':
-            if (isset($getRequest['id_album'])) {
-                if (!$fileRequest['fichier']['error'] == 0) {
+            if (isset($getRequest['album_id'])) {
+                if (!$fileRequest['file']['error'] == 0) {
                     throw new Exception("Problème d'upload, contactez un administrateur...");
                     /* en cas de fichier corrompu ou trop gros */
                 }
@@ -186,18 +186,18 @@ EOT;
                 $data = is_array($postRequest) ? $postRequest : array();
                 $fileData = is_array($fileRequest) ? $fileRequest : array();
 
-                $data['id_album'] = $getRequest['id_album'];
-                $data['file'] = $data['id_album'] . $fileData['file']['name'];
+                $data['album_id'] = $getRequest['album_id'];
+                $data['file'] = $data['album_id'] . $fileData['file']['name'];
                 Strings::htmlEncodeArray($data);
 
                 $music = Music::initialize($data);
-                $form = new MusicForm($Musmusicique);
-                if ($form->verify($file_data['file']['type'])) {
+                $form = new MusicForm($music);
+                if ($form->verify($fileData['file']['type'])) {
                     $title = 'Piste enregistrée';
 
-                    $uploader = new Uploader('fichier');
+                    $uploader = new Uploader('file');
                     $uploader->validTypes = array('audio/mp3');
-                    $uploader->setName($data['fichier']);
+                    $uploader->setName($data['file']);
                     $uploader->uploadFile(DATA_FILE);
 
                     MusicRepository::new($music);
@@ -205,8 +205,8 @@ EOT;
                     $c = $musicUi->makeAdminHtml();
                 } else {
                     $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
-                    $albumId = $data['id_album'];
-                    $c .= $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;id_album=$albumId", 'ajouter une piste');
+                    $albumId = $data['album_id'];
+                    $c .= $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'ajouter une piste');
                 }
             }
             break;
@@ -232,7 +232,7 @@ EOT;
 
                 if (!empty($fileData['name'])) {
                     /* attention à ne pas effacer si le nom du nouveau fichier est identique à son prédecesseur */
-                    if ($id . $fileData['name'] == $data['ficfilehier']) {
+                    if ($id . $fileData['name'] == $data['file']) {
                         $case = 1; // On uploade mais on efface pas
                     } else {
                         $case = 2; //On uploade et on efface
@@ -248,12 +248,12 @@ EOT;
                 /* mettre à jour avec les données du formulaire, impose de redownloader l'image? */
                 if ($case > 0) {
                     //Si nouveau, alors upload/redimensionnement de la nouvelle image
-                    $uploader = new Uploader('fichier');
+                    $uploader = new Uploader('file');
                     $uploader->validTypes = array('audio/ogg', 'audio/mpeg');
-                    $uploader->setName($data['fichier']);
+                    $uploader->setName($data['file']);
                     $uploader->uploadFile(DATA_FILE);
                     if ($case > 1) {
-                        FileManager::deleteFile($music->getFile(), DATA_FILE);
+                        FilesManager::deleteFile($music->getFile(), DATA_FILE);
                     }
                 }
 
@@ -274,9 +274,9 @@ EOT;
         case 'supprimer_musique':
             $title = 'Musique supprimée';
             $id = $getRequest['id'];
-            $Music = MusicRepository::read($id);
-            MusicRepository::delete($Music);
-            FileManager::deleteFile($Music->getFichier(), DATA_FILE);
+            $music = MusicRepository::read($id);
+            MusicRepository::delete($music);
+            FilesManager::deleteFile($music->getFile(), DATA_FILE);
             break;
 
         // Page d'administration : affiche tous les Albums de la BD

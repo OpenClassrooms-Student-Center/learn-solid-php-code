@@ -46,7 +46,7 @@ try {
                     $c .= '</ol></section>';
                 }
 
-                $album = AlbumRepository::read($id_album);
+                $album = AlbumRepository::read($albumId);
                 $albumUi = new AlbumUi($album);
                 $c .= $albumUi->displayAlbumInfos();
             }

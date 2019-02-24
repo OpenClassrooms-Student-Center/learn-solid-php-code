@@ -4,40 +4,40 @@ namespace App\Classes\Music;
 
 class Form
 {
-    protected $musique;
+    protected $music;
     protected $erreurs;
 
-    public function __construct($musique)
+    public function __construct($music)
     {
-        $this->erreurs = array(
-               'titre' => '',
-               'fichier' => '',
-        );
+        $this->errors = [
+               'title' => '',
+               'file' => '',
+        ];
 
-        $this->musique = $musique;
+        $this->music = $music;
     }
 
     public function makeForm($actionUrl, $invite)
     {
-        $titre = $this->musique->getTitre();
-        $id = $this->musique->getId();
-        $musique = $this->musique->getFichier();
+        $title = $this->music->getTitle();
+        $id = $this->music->getId();
+        $file = $this->music->getFile();
 
         $text = <<<EOT
 <form class="form-horizontal" action="{$actionUrl}" method="post" enctype="multipart/form-data">
     <div class="controls">
-        <label for="fichier">Fichier:</label>
-        <input type="file" id="fichier" onchange="filesInputHandler(this.files,'titre')"  name="fichier" value="{$musique}" />
-        <span class="help-inline">{$this->erreurs['fichier']}</span>
+        <label for="file">Fichier:</label>
+        <input type="file" id="file" onchange="filesInputHandler(this.files,'title')"  name="file" value="{$file}" />
+        <span class="help-inline">{$this->errors['file']}</span>
     </div>
     <div class="controls">
-        <label for="titre">Titre :</label>
-        <input type="text" id="titre"  name="titre" value="{$titre}" />
-        <span class="help-inline">{$this->erreurs['titre']}</span>
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" value="{$title}" />
+        <span class="help-inline">{$this->errors['title']}</span>
     </div>
     <div class="submit form-actions">
         <input type="hidden" name="id" value="{$id}" />
-        <input type="hidden" name="fichier" value="{$musique}" />
+        <input type="hidden" name="file" value="{$file}" />
         <button class="btn btn-primary" type="submit" name="go">{$invite}</button>
     </div>
 </form>
@@ -46,15 +46,15 @@ EOT;
         return $text;
     }
 
-    public function verifier($mime)
+    public function verify($mime)
     {
         $flag = true;
-        if (empty($this->musique->getTitre())) {
-            $this->erreurs['titre'] = '<em class="label label-warning">Il faut entrer le titre.</em>';
+        if (empty($this->music->getTitle())) {
+            $this->errors['title'] = '<em class="label label-warning">Il faut entrer le titre.</em>';
             $flag = false;
         }
         if (preg_match('$audio/mp3$', $mime) === 0) {
-            $this->erreurs['fichier'] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>';
+            $this->errors['file'] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>';
             $flag = false;
         }
 

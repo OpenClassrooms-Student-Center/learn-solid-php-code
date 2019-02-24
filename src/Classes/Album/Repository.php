@@ -8,16 +8,16 @@ use PDO;
 
 class Repository
 {
-    public static function lire($id)
+    public static function read($id)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('SELECT * FROM albums WHERE id=:id');
 
         $data = array('id' => $id);
         $sth->execute($data);
-        $ligne = $sth->fetch(PDO::FETCH_ASSOC);
+        $line = $sth->fetch(PDO::FETCH_ASSOC);
 
-        return Album::initialize($ligne);
+        return Album::initialize($line);
     }
 
     public static function getPlayList($id)
@@ -39,46 +39,40 @@ class Repository
         return $musiques;
     }
 
-    public static function enregistrerNouveau(Album $album)
+    public static function new(Album $album)
     {
         $db = Database::getInstance()->getConnexion();
-        $sth = $db->prepare('insert into albums set id=:id,titre=:titre, auteur=:auteur, fichier=:fichier, dateIns=:dateIns');
+        $sth = $db->prepare('insert into albums set id=:id,title=:title, author=:author, file=:file, created_at=:created_at');
 
-        $data = array(
-        'id' => $album->getId(),
-        'titre' => $album->getTitre(),
-        'auteur' => $album->getAuteur(),
-        'dateIns' => $album->getDateIns(),
-        'fichier' => $album->getFichier(),
-        );
-
-        $sth->execute($data);
-    }
-
-    public static function enregistrerModif(Album $album)
-    {
-        $db = Database::getInstance()->getConnexion();
-
-        $sth = $db->prepare('update albums set titre=:titre, auteur=:auteur, fichier=:fichier where id =:id ');
-
-        $data = array(
+        $sth->execute([
             'id' => $album->getId(),
-            'titre' => $album->getTitre(),
-            'auteur' => $album->getAuteur(),
-            'fichier' => $album->getFichier(),
-        );
-
-        $sth->execute($data);
+            'title' => $album->getTitle(),
+            'author' => $album->getAuthor(),
+            'created_at' => $album->getCreatedAt(),
+            'file' => $album->getFile(),
+        ]);
     }
 
-    public static function supprimer(Album $album)
+    public static function update(Album $album)
+    {
+        $db = Database::getInstance()->getConnexion();
+
+        $sth = $db->prepare('update albums set title=:title, author=:author, file=:file where id =:id');
+
+        $sth->execute([
+            'id' => $album->getId(),
+            'title' => $album->getTitle(),
+            'author' => $album->getAuthor(),
+            'file' => $album->getFile(),
+        ]);
+    }
+
+    public static function delete(Album $album)
     {
         $db = Database::getInstance()->getConnexion();
         $sth = $db->prepare('delete from albums where id=:id');
 
-        $data = array('id' => $album->getId());
-
-        $sth->execute($data);
+        $sth->execute(['id' => $album->getId()]);
     }
 
     public static function getListAlbums($limit)
@@ -87,10 +81,10 @@ class Repository
 
         $sth = $db->query("SELECT * FROM albums LIMIT $limit");
 
-        $lignes = $sth->fetchAll(PDO::FETCH_ASSOC);
-        $albums = array();
-        foreach ($lignes as $ligne) {
-            $albums[] = Album::initialize($ligne);
+        $rawAlbums = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $albums = [];
+        foreach ($rawAlbums as $rawAlbum) {
+            $albums[] = Album::initialize($rawAlbum);
         }
 
         return $albums;
@@ -102,10 +96,10 @@ class Repository
 
         $sth = $db->query('SELECT * FROM albums');
 
-        $lignes = $sth->fetchAll(PDO::FETCH_ASSOC);
-        $albums = array();
-        foreach ($lignes as $ligne) {
-            $albums[] = Album::initialize($ligne);
+        $rawAlbums = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $albums = [];
+        foreach ($rawAlbums as $rawAlbum) {
+            $albums[] = Album::initialize($rawAlbum);
         }
 
         return $albums;

@@ -3,5 +3,6 @@ config/config.php
 /vendor/
 
 build/
+data/
 
 .php_cs.cache

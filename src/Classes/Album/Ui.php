@@ -13,13 +13,13 @@ class Ui
 
     public function makeHtml()
     {
-        $publicurl = PUBLIC_URL;
+        $publicUrl = PUBLIC_URL;
         $id = $this->album->getId();
-        $titre = $this->album->getTitre();
-        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
+        $title = $this->album->getTitle();
+        $fileSource = DATA_URL . 'tb_' . $this->album->getFile();
         $html = <<<EOT
 <div class="album">
-    <a href="{$publicurl}index.php?a=ecouter&amp;id={$id}"><img src="{$fichierSrc}" alt="{$titre}" /></a>
+    <a href="{$publicUrl}index.php?a=ecouter&amp;id={$id}"><img src="{$fileSource}" alt="{$title}" /></a>
 </div>
 EOT;
 
@@ -29,15 +29,15 @@ EOT;
     public function makeRowView()
     {
         $id = $this->album->getId();
-        $titre = $this->album->getTitre();
-        $auteur = $this->album->getAuteur();
-        $publicurl = PUBLIC_URL;
+        $title = $this->album->getTitle();
+        $author = $this->album->getAuthor();
+        $publicUrl = PUBLIC_URL;
 
         $html = <<<EOT
        <tr>
-            <td>{$titre}</td>
-            <td>{$auteur}</td>
-            <td><a class="btn" href="{$publicurl}index.php?a=ecouter&amp;id={$id}">Ecouter <i class="icon-headphones icon-white"></i></a></td>
+            <td>{$title}</td>
+            <td>{$author}</td>
+            <td><a class="btn" href="{$publicUrl}index.php?a=ecouter&amp;id={$id}">Ecouter <i class="icon-headphones icon-white"></i></a></td>
        </tr>
 EOT;
 
@@ -46,9 +46,9 @@ EOT;
 
     public function makeTableView()
     {
-        $titre = $this->album->getTitre();
-        $auteur = $this->album->getAuteur();
-        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
+        $title = $this->album->getTitle();
+        $author = $this->album->getAuthor();
+        $fileSource = DATA_URL . 'tb_' . $this->album->getFile();
 
         $html = <<<EOT
      
@@ -62,9 +62,9 @@ EOT;
        </thead>
        <tbody>
        <tr>
-            <td>{$titre}</td>
-            <td>{$auteur}</td>
-            <td><img src="{$fichierSrc}" alt="{$titre}" /></td>
+            <td>{$title}</td>
+            <td>{$author}</td>
+            <td><img src="{$fileSource}" alt="{$title}" /></td>
        </tr>
        </tbody>
    </table>
@@ -75,21 +75,21 @@ EOT;
 
     public function makeHtmlAdmin()
     {
-        $adminurl = ADMIN_URL;
+        $adminUrl = ADMIN_URL;
         $id = $this->album->getId();
-        $titre = $this->album->getTitre();
-        $auteur = $this->album->getAuteur();
-        $fichierSrc = DATA_URL . 'tb_' . $this->album->getFichier();
+        $title = $this->album->getTitle();
+        $author = $this->album->getAuthor();
+        $fileSource = DATA_URL . 'tb_' . $this->album->getFile();
 
         $htmlCode = <<<EOT
       <tr>
-        <td>{$titre}</td>
-        <td>{$auteur}</td>
-        <td><img src="{$fichierSrc}" alt="{$titre}" /></td>
+        <td>{$title}</td>
+        <td>{$author}</td>
+        <td><img src="{$fileSource}" alt="{$title}" /></td>
         <td>
             <ul class="nav nav-tabs nav-stacked">
-                <li><a href="{$adminurl}index.php?a=modifier&amp;id={$id}">Modifier</a></li>
-                <li><a href="{$adminurl}index.php?a=uploader&amp;id={$id}">Uploader Pistes</a></li>
+                <li><a href="{$adminUrl}index.php?a=modifier&amp;id={$id}">Modifier</a></li>
+                <li><a href="{$adminUrl}index.php?a=uploader&amp;id={$id}">Uploader Pistes</a></li>
                 <li><a href="#deleteModal" data-toggle="modal">Supprimer</a></li>   
             </ul>
         </td>
@@ -101,7 +101,7 @@ EOT;
 
     public function displayModal()
     {
-        $adminurl = ADMIN_URL;
+        $adminUrl = ADMIN_URL;
         $id = $this->album->getId();
         $html = <<<EOT
       <div id="deleteModal" class="modal hide fade in" >
@@ -115,7 +115,7 @@ EOT;
 
                 <div class="modal-footer">
                     <a class="btn" data-dismiss="modal" href="#">Annuler</a>
-                    <a class="btn btn-primary" href="{$adminurl}index.php?a=supprimer&amp;id={$id}">Confirmer</a>
+                    <a class="btn btn-primary" href="{$adminUrl}index.php?a=supprimer&amp;id={$id}">Confirmer</a>
                 </div>
             </div>
 EOT;
@@ -125,14 +125,14 @@ EOT;
 
     public function displayAlbumInfos()
     {
-        $auteur = $this->album->getAuteur();
-        $titre = $this->album->getTitre();
-        $fichierSrc = DATA_URL . $this->album->getFichier();
+        $author = $this->album->getAuthor();
+        $title = $this->album->getTitle();
+        $fileSource = DATA_URL . $this->album->getFile();
         $html = <<<EOT
 <section id="album-display-infos" class="span4">
-    <h3>{$titre}</h3>
-    <p>Par : <em>{$auteur}</em></p>
-    <img src="{$fichierSrc}" alt="{$titre}" />
+    <h3>{$title}</h3>
+    <p>Par : <em>{$author}</em></p>
+    <img src="{$fileSource}" alt="{$title}" />
 </section>
 EOT;
 
