@@ -97,11 +97,11 @@ EOT;
 
         case 'enregistrermodif':
             $title = 'Modifications enregistrées';
-            $data = is_array($postRequest) ? $postRequest : array();
-            $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : array();
+            $data = is_array($postRequest) ? $postRequest : [];
+            $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : [];
 
-            if (isset($data['id'])) {
-                $id = $data['id'];
+            if (isset($getRequest['id'])) {
+                $id = $getRequest['id'];
 
                 if (!empty($fileData['name'])) {
                     /* attention à ne pas effacer si le nom du nouveau fichier
@@ -262,8 +262,8 @@ EOT;
                 $form = new MusicForm($music);
                 if ($form->verifier($fileData['type'])) {
                     MusicRepository::update($music);
-                    $Musique_display = MusicUi::factory($music);
-                    $c = $Musique_display->makeHtml();
+                    $musicUi = MusicUi::factory($music);
+                    $c = $musicUi->makeHtml();
                 } else {
                     $titre = 'Echec de modification';
                     $c = $form->makeForm(ADMIN_URL . "index.php?a=modifier_musique_modif&amp;id=$id", 'modifier');

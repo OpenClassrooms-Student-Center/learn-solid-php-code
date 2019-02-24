@@ -14,11 +14,14 @@ class Ui
     public function makeHtml()
     {
         $publicUrl = PUBLIC_URL;
+        $author = $this->album->getAuthor();
         $id = $this->album->getId();
         $title = $this->album->getTitle();
         $fileSource = DATA_URL . 'tb_' . $this->album->getFile();
         $html = <<<EOT
 <div class="album">
+    <h3>{$title}</h3>
+    <p>par {$author}</p>
     <a href="{$publicUrl}index.php?a=ecouter&amp;id={$id}"><img src="{$fileSource}" alt="{$title}" /></a>
 </div>
 EOT;
