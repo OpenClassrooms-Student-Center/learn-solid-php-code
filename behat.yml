@@ -4,4 +4,3 @@ default:
             base_url: http://localhost:8000
             files_path: features/fixtures/
             goutte: ~
-                

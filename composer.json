@@ -17,7 +17,8 @@
         "behat/mink-extension": "^2.3",
         "behat/mink-goutte-driver": "^1.2",
         "friendsofphp/php-cs-fixer": "^2.14.2",
-        "phpstan/phpstan": "^0.11.2"
+        "phpstan/phpstan": "^0.11.2",
+        "sensiolabs/security-checker": "^5.0"
     },
     "license": "MIT",
     "authors": [
@@ -34,5 +35,13 @@
             "*": "dist"
         },
         "sort-packages": true
+    },
+    "scripts": {
+        "cs-fix": "@php ./vendor/bin/php-cs-fixer fix",
+        "test": "@php ./vendor/bin/behat"
+    },
+    "scripts-descriptions": {
+        "cs-fix": "Check and fix coding styles using PHP CS Fixer",
+        "test": "Launch Behat test suite"
     }
 }
