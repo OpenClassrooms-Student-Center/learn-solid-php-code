@@ -10,6 +10,7 @@ use App\Classes\Album\Collection as AlbumCollection;
 use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Ui as MusicUi;
 
+$skeleton = '../ui/pages/galerie.html.php';
 try {
     $getRequest = $_GET;
     $action = isset($getRequest['a']) ? $getRequest['a'] : '';
@@ -19,7 +20,6 @@ try {
     $c = '';
     $header = file_get_contents('../ui/fragments/header.frg.html');
     $footer = file_get_contents('../ui/fragments/footer.frg.html');
-    $skeleton = '../ui/pages/galerie.html.php';
 
     switch ($action) {
         case 'ecouter':

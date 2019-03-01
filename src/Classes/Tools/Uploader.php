@@ -82,6 +82,10 @@ class Uploader
         }
         $function = 'imagecreatefrom' . $type;
 
+        if (!is_callable($function)) {
+            return false;
+        }
+
         $image = $function($origin);
 
         $imageWidth = \imagesx($image);
@@ -97,13 +101,21 @@ class Uploader
                 $width = (int) (($height * $imageWidth) / $imageHeight);
             }
             $newImage = \imagecreatetruecolor($width, $height);
-            \imagecopyresampled($newImage, $image, 0, 0, 0, 0, $width, $height, $imageWidth, $imageHeight);
 
-            $function = 'image' . $type;
-            $function($newImage, $destination);
+            if ($newImage !== false) {
+                \imagecopyresampled($newImage, $image, 0, 0, 0, 0, $width, $height, $imageWidth, $imageHeight);
 
-            \imagedestroy($newImage);
-            \imagedestroy($image);
+                $function = 'image' . $type;
+
+                if (!is_callable($function)) {
+                    return false;
+                }
+
+                $function($newImage, $destination);
+
+                \imagedestroy($newImage);
+                \imagedestroy($image);
+            }
         }
     }
 }
