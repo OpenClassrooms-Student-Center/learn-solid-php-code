@@ -1,8 +1,9 @@
-config/config.php
+/config/config.php
+/config/config_db.php_dist
 
 /vendor/
 
-build/
-data/
+/build/
+/data/
 
 .php_cs.cache
