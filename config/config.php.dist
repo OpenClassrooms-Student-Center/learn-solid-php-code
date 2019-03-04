@@ -16,8 +16,8 @@ define('ADMIN_URL', BASE_URL . "admin/");
 /**
  * files repository 
  */
-define('ENTREPOT_URL', BASE_URL . 'entrepot/');
-define('ENTREPOT_FILE', BASE_FILE . 'entrepot/');
+define('DATA_URL', BASE_URL . 'data/');
+define('DATA_FILE', BASE_FILE . 'data/');
 
 /**
  * external libraries
@@ -31,6 +31,5 @@ define('HELPER_FILE', BASE_FILE . 'helpers/');
 define('DB_CONFIG', "config/config_db.php");
 
 
-require_once(BASE_FILE . 'config/autoload.php');
 require_once(BASE_FILE . DB_CONFIG);
 ?>

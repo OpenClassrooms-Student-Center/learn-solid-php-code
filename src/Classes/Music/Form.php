@@ -4,8 +4,8 @@ namespace App\Classes\Music;
 
 class Form
 {
+    protected $errors;
     protected $music;
-    protected $erreurs;
 
     public function __construct($music)
     {

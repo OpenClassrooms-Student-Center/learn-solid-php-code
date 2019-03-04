@@ -7,8 +7,8 @@ class Strings
     /**
      * randomString returns a random string
      *
-     * @param $length length of the string
-     * @param $type lowercase / uppercase / numeric
+     * @param int $length length of the string
+     * @param string $type lowercase / uppercase / numeric
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class Strings
      * It is to be used in all HTML attributes such as title, longdesc,
      * value in a form, etc.
      *
-     * @param $string $string string to recode
+     * @param string $string string to recode
      *
      * @return string
      */
@@ -55,8 +55,8 @@ class Strings
     /**
      * htmlEncodeString replaces all <, > and & by their HTML entities
      *
-     * @param $string string to encode
-     * @param $charset character encoding, optionnal (defaults to utf-8)
+     * @param string $string string to encode
+     * @param string $charset character encoding, optionnal (defaults to utf-8)
      *
      * @return string an encoded string
      */
@@ -68,7 +68,7 @@ class Strings
     /**
      * htmlCleanString
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
@@ -81,20 +81,20 @@ class Strings
         );
         $string = preg_replace('/([^.a-z0-9]+)/i', '-', $string);
 
-        return $string;
+        return null === $string ? '' : $string;
     }
 
     /**
      * htmlEncodeArray recursively loops an array to encode <, > and & in
      * all entries (typically a POST data array)
      *
-     * @param $array passed by reference array
-     * @param $htmlOk list of array keys where HTML is accepted, hence
-     * where no encoding is needed
+     * @param array $tab array passed by reference
+     * @param array $htmlOk list of array keys where HTML is accepted, hence
+     *                      where no encoding is needed
      *
      * @note no return value since array is passed by reference
      */
-    public static function htmlEncodeArray(&$tab, $htmlOk = array())
+    public static function htmlEncodeArray(array &$tab, array $htmlOk = [])
     {
         while (list($k) = each($tab)) {
             if (!is_array($tab[$k])) {
