@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Music\Mp3;
+
 class Music
 {
     private $id;

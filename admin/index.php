@@ -14,11 +14,17 @@ use App\Classes\Music\Repository as MusicRepository;
 use App\Classes\Music\Form as MusicForm;
 use App\Classes\Music\Collection as MusicCollection;
 use App\Classes\Music\Ui as MusicUi;
-use App\Classes\Tools\Database;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\FilesManager;
 use App\Controllers\AdminController;
+
+// initialisation des variables
+$title = '';
+$c = '';
+$header = file_get_contents('../ui/fragments/header.frg.html');
+$footer = file_get_contents('../ui/fragments/footer.frg.html');
+$skeleton = '../ui/pages/galerie.html.php';
 
 try {
     $getRequest = $_GET;
@@ -26,13 +32,6 @@ try {
     $fileRequest = $_FILES;
 
     $action = isset($getRequest['a']) ? $getRequest['a'] : '';
-
-    // initialisation des variables
-    $title = '';
-    $c = '';
-    $header = file_get_contents('../ui/fragments/header.frg.html');
-    $footer = file_get_contents('../ui/fragments/footer.frg.html');
-    $skeleton = '../ui/pages/galerie.html.php';
 
     /* contrôleur :
      * indique que faire en fonction de l'action demandée
@@ -70,8 +69,8 @@ EOT;
         case 'enregistrernouveau':
             $title = "Création d'album";
 
-            $data = is_array($postRequest) ? $postRequest : array();
-            $fileData = is_array($fileRequest) ? $fileRequest : array();
+            $data = $postRequest;
+            $fileData = $fileRequest;
             $data['file'] = $data['id'] . $fileData['file']['name'];
             Strings::htmlEncodeArray($data);
             $album = Album::initialize($data);
@@ -98,7 +97,7 @@ EOT;
 
         case 'enregistrermodif':
             $title = 'Modifications enregistrées';
-            $data = is_array($postRequest) ? $postRequest : [];
+            $data = $postRequest;
             $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : [];
 
             if (isset($getRequest['id'])) {
@@ -184,8 +183,8 @@ EOT;
                     /* en cas de fichier corrompu ou trop gros */
                 }
 
-                $data = is_array($postRequest) ? $postRequest : array();
-                $fileData = is_array($fileRequest) ? $fileRequest : array();
+                $data = $postRequest;
+                $fileData = $fileRequest;
 
                 $data['album_id'] = $getRequest['album_id'];
                 $data['file'] = $data['album_id'] . $fileData['file']['name'];
@@ -226,7 +225,7 @@ EOT;
 
         case 'modifier_musique_modif':
             $title = 'Modifications enregistrées';
-            $data = is_array($postRequest) ? $postRequest : array();
+            $data = $postRequest;
             $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : array();
             if (isset($data['id'])) {
                 $id = $data['id'];
@@ -261,7 +260,7 @@ EOT;
                 $music->update($data);
                 MusicRepository::update($music);
                 $form = new MusicForm($music);
-                if ($form->verifier($fileData['type'])) {
+                if ($form->verify($fileData['type'])) {
                     MusicRepository::update($music);
                     $musicUi = MusicUi::factory($music);
                     $c = $musicUi->makeHtml();
