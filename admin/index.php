@@ -18,6 +18,7 @@ use App\Classes\Tools\Database;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\FilesManager;
+use App\Controllers\AdminController;
 
 try {
     $getRequest = $_GET;
@@ -281,36 +282,9 @@ EOT;
 
         // Page d'administration : affiche tous les Albums de la BD
         default:
-            $title = "Module d'administration des Albums";
+            $controller = new AdminController();
 
-            $sqlQuery = 'select * from albums order by created_at DESC';
-            $db = Database::getInstance()->getConnexion();
-
-            $stmt = $db->query($sqlQuery);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            /* Traiter les résultats de la requête pour chaque ligne de résultat */
-            $c = '<table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Auteur</th>
-                    <th>Vignette</th>
-                    <th>Actions</th>
-            </tr>
-            </thead>';
-
-            foreach ($results as $line) {
-                $album = Album::initialize($line);
-                $albumUi = new AlbumUi($album);
-                $c .= $albumUi->makeHtmlAdmin();
-                $c .= $albumUi->displayModal();
-            }
-            $c .= '</table>';
-            $c .= <<<EOT
-                <script type="text/javascript">
-                    $('.nav li:eq(1)').attr('class','active');
-                </script>
-EOT;
+            $controller->manageAlbums();
     }
 } catch (Exception $e) {
     $c = $e->getMessage();
