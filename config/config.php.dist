@@ -4,7 +4,7 @@
  * Global configuration of application
  */
 
-define('SERVEUR_URL', 'http://www.weplaymusic.fr');
+define('SERVEUR_URL', 'http://localhost:81');
 define('BASE_URL', SERVEUR_URL . '/');
 define('BASE_FILE', __DIR__.'/../');
 
