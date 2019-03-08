@@ -7,9 +7,7 @@
 define('SERVEUR_URL', 'http://localhost:81');
 define('BASE_URL', SERVEUR_URL . '/');
 define('BASE_FILE', __DIR__.'/../');
-
-define('LIB_FILE', BASE_FILE . 'modeles/');
-
+define('VIEWS', BASE_FILE . '/views/');
 define('PUBLIC_URL', BASE_URL . "public/");
 define('ADMIN_URL', BASE_URL . "admin/");
 

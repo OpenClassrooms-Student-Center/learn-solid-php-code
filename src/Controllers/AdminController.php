@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\AlbumRepository;
+use App\Models\Album;
 
 class AdminController
 {
@@ -23,18 +24,51 @@ class AdminController
 
         $response = $this->render('albums/manage', [
             'title' => "Module d'administration des Albums",
-            'content' => $content,
+            'tableContent' => $content,
         ]);
 
         return $this->returnResponse($response);
     }
 
-    public function updateAlbum()
+    public function addAlbum()
+    {
+        $album = Album::initialize();
+        $response = $this->render('albums/add', [
+            'title' => 'Ajouter un album',
+            'albumId' => $album->getId(),
+            'submitUrl' => 'index.php?a=enregistrernouveau',
+        ]);
+
+        return $this->returnResponse($response);
+    }
+
+    public function submitAddAlbum(array $postRequest)
     {
     }
 
-    public function addAlbum()
+    public function updateAlbum(array $getRequest)
     {
+        if (!isset($getRequest['id'])) {
+            $response = $this->render('albums/update_not_found', [
+                'title' => "l'Album n'a pas été trouvé",
+                'albumId' => '',
+            ]);
+        }
+
+        $id = $getRequest['id'];
+        $album = AlbumRepository::read($id);
+
+        $title = 'Modifier un album';
+        if (isset($getRequest['id'])) {
+            $album = AlbumRepository::read($id);
+            $form = new AlbumForm($album);
+            $c = '<div class="row-fluid show-grid"><div class="span4">' . $form->makeForm(ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id", 'Modifier') . '</div>';
+
+            $playlist = new MusicCollection(AlbumRepository::getPlayList($id));
+            $c .= '<div class="span8">' . $playlist->viewHtml() . '</div></div>';
+        } else {
+            $c = "<h3 class='alert'>Echec lors de la modification de l'album</h3>";
+        }
     }
 
     public function deleteAlbum()

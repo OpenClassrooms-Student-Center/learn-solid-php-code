@@ -1,7 +1,7 @@
 <?php
     $album = $parameters['album'];
     $id = $album->getId();
-    $deleteUrl = ADMIN_URL. 'index.php?a=supprimer&amp;id='.$id;  
+    $deleteUrl = ADMIN_URL . 'index.php?a=supprimer&amp;id=' . $id;
 ?>
 <div id="deleteModal" class="modal hide fade in" >
     <div class="modal-header">
@@ -14,6 +14,6 @@
 
     <div class="modal-footer">
         <a class="btn" data-dismiss="modal" href="#">Annuler</a>
-        <a class="btn btn-primary" href="<?php echo $deleteUrl ?>">Confirmer</a>
+        <a class="btn btn-primary" href="<?php echo $deleteUrl; ?>">Confirmer</a>
     </div>
 </div>

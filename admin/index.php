@@ -25,6 +25,7 @@ $c = '';
 $header = file_get_contents('../ui/fragments/header.frg.html');
 $footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
+$controller = new AdminController();
 
 try {
     $getRequest = $_GET;
@@ -39,18 +40,11 @@ try {
      */
     switch ($action) {
         case 'ajouter':
-            $title = 'Ajouter un album';
-            $album = Album::initialize();
-            $form = new AlbumForm($album);
-            $c = $form->makeForm(ADMIN_URL . 'index.php?a=enregistrernouveau', 'ajouter');
-            $c .= <<<EOT
-                <script type="text/javascript">
-                    $('.nav li:eq(0)').attr('class','active');
-                </script>
-EOT;
+            return $controller->addAlbum();
             break;
 
         case 'modifier':
+            //return $controller->updateAlbum();
             $title = 'Modifier un album';
             if (isset($getRequest['id'])) {
                 $id = $getRequest['id'];
@@ -281,9 +275,7 @@ EOT;
 
         // Page d'administration : affiche tous les Albums de la BD
         default:
-            $controller = new AdminController();
-
-            $controller->manageAlbums();
+            return $controller->manageAlbums();
     }
 } catch (Exception $e) {
     $c = $e->getMessage();
