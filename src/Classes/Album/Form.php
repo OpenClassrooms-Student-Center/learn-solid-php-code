@@ -84,4 +84,9 @@ EOT;
 
         return $flag;
     }
+
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 }

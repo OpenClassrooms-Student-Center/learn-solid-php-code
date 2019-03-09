@@ -12,7 +12,6 @@ use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Music;
 use App\Classes\Music\Repository as MusicRepository;
 use App\Classes\Music\Form as MusicForm;
-use App\Classes\Music\Collection as MusicCollection;
 use App\Classes\Music\Ui as MusicUi;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
@@ -34,9 +33,8 @@ try {
 
     $action = isset($getRequest['a']) ? $getRequest['a'] : '';
 
-    /* contrôleur :
-     * indique que faire en fonction de l'action demandée
-     * par l'utilisateur
+    /*
+     * Will execute an action according to the User request
      */
     switch ($action) {
         case 'ajouter':
@@ -44,23 +42,11 @@ try {
             break;
 
         case 'modifier':
-            //return $controller->updateAlbum();
-            $title = 'Modifier un album';
-            if (isset($getRequest['id'])) {
-                $id = $getRequest['id'];
-                $album = AlbumRepository::read($id);
-                $form = new AlbumForm($album);
-                $c = '<div class="row-fluid show-grid"><div class="span4">' . $form->makeForm(ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id", 'Modifier') . '</div>';
-
-                $playlist = new MusicCollection(AlbumRepository::getPlayList($id));
-                $c .= '<div class="span8">' . $playlist->viewHtml() . '</div></div>';
-            } else {
-                $c = "<h3 class='alert'>Echec lors de la modification de l'album</h3>";
-            }
-
+            return $controller->updateAlbum($getRequest);
             break;
 
         case 'enregistrernouveau':
+            return $controller->submitAddAlbum($postRequest, $fileRequest);
             $title = "Création d'album";
 
             $data = $postRequest;

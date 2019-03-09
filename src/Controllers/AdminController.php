@@ -4,6 +4,10 @@ namespace App\Controllers;
 
 use App\Models\AlbumRepository;
 use App\Models\Album;
+use App\Classes\Album\Form as AlbumForm;
+use App\Classes\Music\Collection as MusicCollection;
+use App\Classes\Tools\Strings;
+use App\Classes\Tools\Uploader;
 
 class AdminController
 {
@@ -42,33 +46,59 @@ class AdminController
         return $this->returnResponse($response);
     }
 
-    public function submitAddAlbum(array $postRequest)
+    public function submitAddAlbum(array $postRequest, array $fileRequest)
     {
+        $title = 'Album enregistré';
+        $formErrors = [];
+
+        $postRequest['file'] = $postRequest['id'] . $fileRequest['file']['name'];
+        Strings::htmlEncodeArray($postRequest);
+        $album = Album::initialize($postRequest);
+        $form = new AlbumForm($album);
+
+        if ($form->verify($fileRequest['file']['type'])) {
+            $uploader = new Uploader('file');
+            $uploader->validTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/JPG');
+            $uploader->setName($postRequest['file']);
+            $uploader->uploadFile(DATA_FILE);
+            $uploader->resize(DATA_FILE . '/' . $postRequest['file'], DATA_FILE . '/' . 'tb_' . $postRequest['file'], 150, 150);
+            AlbumRepository::new($album);
+        } else {
+            $title = "Echec de l'enregistrement";
+            $formErrors = $form->getErrors();
+        }
+
+        $content = $this->render('albums/submit_add', [
+            'title' => $title,
+            'album' => $album,
+            'formErrors' => $formErrors,
+        ]);
+
+        return $this->returnResponse($content);
     }
 
     public function updateAlbum(array $getRequest)
     {
         if (!isset($getRequest['id'])) {
-            $response = $this->render('albums/update_not_found', [
+            $content = $this->render('albums/update_not_found', [
                 'title' => "l'Album n'a pas été trouvé",
                 'albumId' => '',
             ]);
+
+            return $this->returnResponse($content);
         }
 
         $id = $getRequest['id'];
         $album = AlbumRepository::read($id);
+        $playList = new MusicCollection(AlbumRepository::getPlayList($id));
 
-        $title = 'Modifier un album';
-        if (isset($getRequest['id'])) {
-            $album = AlbumRepository::read($id);
-            $form = new AlbumForm($album);
-            $c = '<div class="row-fluid show-grid"><div class="span4">' . $form->makeForm(ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id", 'Modifier') . '</div>';
-
-            $playlist = new MusicCollection(AlbumRepository::getPlayList($id));
-            $c .= '<div class="span8">' . $playlist->viewHtml() . '</div></div>';
-        } else {
-            $c = "<h3 class='alert'>Echec lors de la modification de l'album</h3>";
-        }
+        return $this->returnResponse($this->render('albums/update', [
+            'title' => 'Modifier un album',
+            'album' => $album,
+            'fileSource' => DATA_URL . 'tb_' . $album->getFile(),
+            'submitUrl' => ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id",
+            'playList' => $playList->viewHtml(),
+        ]));
     }
 
     public function deleteAlbum()

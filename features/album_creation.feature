@@ -11,7 +11,7 @@ Scenario: Album creation
     And I fill in "title" with "Mon nouvel album"
     And I fill in "author" with "Zozor"
     When I attach the file "img/album_1.jpg" to "file"
-    Then I press "ajouter"
+    Then I press "Ajouter"
     Then I should see "Album enregistré"
     Then I should see "Mon nouvel album"
     Then I should see "Zozor"
