@@ -2,21 +2,19 @@
 
 require_once '../config/config.php';
 require_once '../config/config_db.php';
-
 require_once '../vendor/autoload.php';
 
-use App\Classes\Album\Album;
-use App\Classes\Album\Repository as AlbumRepository;
-use App\Classes\Album\Form as AlbumForm;
-use App\Classes\Album\Ui as AlbumUi;
-use App\Classes\Music\Music;
 use App\Classes\Music\Repository as MusicRepository;
+use App\Classes\Album\Repository as AlbumRepository;
 use App\Classes\Music\Form as MusicForm;
+use App\Classes\Album\Form as AlbumForm;
+use App\Controllers\AlbumController;
+use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Ui as MusicUi;
-use App\Classes\Tools\Strings;
-use App\Classes\Tools\Uploader;
 use App\Classes\Tools\FilesManager;
-use App\Controllers\AdminController;
+use App\Classes\Tools\Uploader;
+use App\Classes\Tools\Strings;
+use App\Classes\Music\Music;
 
 // initialisation des variables
 $title = '';
@@ -24,7 +22,7 @@ $c = '';
 $header = file_get_contents('../ui/fragments/header.frg.html');
 $footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
-$controller = new AdminController();
+$controller = new AlbumController();
 
 try {
     $getRequest = $_GET;
@@ -47,32 +45,6 @@ try {
 
         case 'enregistrernouveau':
             return $controller->submitAddAlbum($postRequest, $fileRequest);
-            $title = "Création d'album";
-
-            $data = $postRequest;
-            $fileData = $fileRequest;
-            $data['file'] = $data['id'] . $fileData['file']['name'];
-            Strings::htmlEncodeArray($data);
-            $album = Album::initialize($data);
-            $form = new AlbumForm($album);
-
-            if ($form->verify($fileData['file']['type'])) {
-                $title = 'Album enregistré';
-
-                $uploader = new Uploader('file');
-                $uploader->validTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/JPG');
-                $uploader->setName($data['file']);
-                $uploader->uploadFile(DATA_FILE);
-                $uploader->resize(DATA_FILE . '/' . $data['file'], DATA_FILE . '/' . 'tb_' . $data['file'], 150, 150);
-                AlbumRepository::new($album);
-
-                $albumUi = new AlbumUi($album);
-                $c = $albumUi->makeTableView();
-            } else {
-                $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
-                $c .= $form->makeForm(ADMIN_URL . 'index.php?a=enregistrernouveau', 'ajouter');
-            }
-
             break;
 
         case 'enregistrermodif':
@@ -84,8 +56,7 @@ try {
                 $id = $getRequest['id'];
 
                 if (!empty($fileData['name'])) {
-                    /* attention à ne pas effacer si le nom du nouveau fichier
-                                 est identique à son prédecesseur */
+                    // dont delete the file if it exists already
                     if ($id . $fileData['name'] == $data['file']) {
                         $case = 1; // On uploade mais on efface pas
                     } else {
@@ -129,18 +100,7 @@ try {
             break;
 
         case 'supprimer':
-            $title = 'Album supprimé';
-            $id = $getRequest['id'];
-            $album = AlbumRepository::read($id);
-            AlbumRepository::delete($album);
-            FilesManager::deleteFile($album->getFile(), DATA_FILE);
-            FilesManager::deleteFile('tb_' . $album->getFile(), DATA_FILE);
-            $listOfMusics = AlbumRepository::getPlayList($id);
-
-            foreach ($listOfMusics as $music) {
-                FilesManager::deleteFile($music->getFile(), DATA_FILE);
-            }
-
+            return $controller->deleteAlbum($getRequest);
             break;
 
         /* Gestion des pistes */

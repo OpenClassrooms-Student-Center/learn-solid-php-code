@@ -8,8 +8,12 @@ use App\Classes\Album\Form as AlbumForm;
 use App\Classes\Music\Collection as MusicCollection;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
+use App\Classes\Tools\FilesManager;
 
-class AdminController
+/**
+ * Albums management
+ */
+class AlbumController
 {
     public function manageAlbums()
     {
@@ -58,7 +62,7 @@ class AdminController
 
         if ($form->verify($fileRequest['file']['type'])) {
             $uploader = new Uploader('file');
-            $uploader->validTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/JPG');
+            $uploader->validTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/JPG'];
             $uploader->setName($postRequest['file']);
             $uploader->uploadFile(DATA_FILE);
             $uploader->resize(DATA_FILE . '/' . $postRequest['file'], DATA_FILE . '/' . 'tb_' . $postRequest['file'], 150, 150);
@@ -68,13 +72,13 @@ class AdminController
             $formErrors = $form->getErrors();
         }
 
-        $content = $this->render('albums/submit_add', [
+        $response = $this->render('albums/submit_add', [
             'title' => $title,
             'album' => $album,
             'formErrors' => $formErrors,
         ]);
 
-        return $this->returnResponse($content);
+        return $this->returnResponse($response);
     }
 
     public function updateAlbum(array $getRequest)
@@ -101,8 +105,22 @@ class AdminController
         ]));
     }
 
-    public function deleteAlbum()
+    public function deleteAlbum(array $getRequest)
     {
+        $id = $getRequest['id'];
+        $album = AlbumRepository::read($id);
+        AlbumRepository::delete($album);
+        FilesManager::deleteFile($album->getFile(), DATA_FILE);
+        FilesManager::deleteFile('tb_' . $album->getFile(), DATA_FILE);
+        $listOfMusics = AlbumRepository::getPlayList($id);
+
+        foreach ($listOfMusics as $music) {
+            FilesManager::deleteFile($music->getFile(), DATA_FILE);
+        }
+
+        return $this->returnResponse($this->render('albums/delete', [
+            'title' => 'Album supprimé',
+        ]));
     }
 
     public function render($template, $parameters)
