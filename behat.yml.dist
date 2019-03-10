@@ -1,6 +1,6 @@
 default:
     extensions:
         Behat\MinkExtension:
-            base_url: http://localhost:81
+            base_url: http://wp.local
             files_path: features/fixtures/
             goutte: ~

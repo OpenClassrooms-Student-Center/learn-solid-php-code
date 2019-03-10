@@ -8,3 +8,5 @@
 
 .php_cs.cache
 .idea/
+
+.behat.yml
