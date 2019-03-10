@@ -45,7 +45,7 @@ class Form
 </div>
 <div class="controls">
     <label for="title">Titre :</label><span>
-    <input type="text" id="title"  name="title" value="{$title}" />
+    <input type="text" id="title" name="title" value="{$title}" />
     <span class="help-inline">{$this->errors['title']}</span>
 </div>
 <div class="controls">

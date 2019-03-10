@@ -34,7 +34,7 @@ class FeatureContext extends MinkContext implements Context
         $connection->exec('TRUNCATE TABLE songs');
 
         // empty the files
-        $files = glob(__DIR__ .'/../../data/*.{jpg,png,gif}', GLOB_BRACE);
+        $files = glob(__DIR__ .'/../../data/*.{jpg,png,gif,mp3}', GLOB_BRACE);
         foreach ($files as $file) {
             if (is_file($file)) {
                 @unlink($file);

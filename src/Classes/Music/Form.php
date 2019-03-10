@@ -27,7 +27,7 @@ class Form
 <form class="form-horizontal" action="{$actionUrl}" method="post" enctype="multipart/form-data">
     <div class="controls">
         <label for="file">Fichier:</label>
-        <input type="file" id="file" onchange="filesInputHandler(this.files,'title')"  name="file" value="{$file}" />
+        <input type="file" id="file" onchange="filesInputHandler(this.files,'title')" name="file" value="{$file}">
         <span class="help-inline">{$this->errors['file']}</span>
     </div>
     <div class="controls">
@@ -37,7 +37,6 @@ class Form
     </div>
     <div class="submit form-actions">
         <input type="hidden" name="id" value="{$id}" />
-        <input type="hidden" name="file" value="{$file}" />
         <button class="btn btn-primary" type="submit" name="go">{$invite}</button>
     </div>
 </form>
@@ -53,7 +52,7 @@ EOT;
             $this->errors['title'] = '<em class="label label-warning">Il faut entrer le titre.</em>';
             $flag = false;
         }
-        if (preg_match('$audio/mp3$', $mime) === 0) {
+        if (preg_match('$audio/mp3|mpeg$', $mime) === 0) {
             $this->errors['file'] = '<em class="label label-warning">Fichier mp3 requis, ' . $mime . ' trouvé.</em>';
             $flag = false;
         }

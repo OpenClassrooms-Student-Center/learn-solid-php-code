@@ -9,8 +9,8 @@
     },
     "require": {
         "php": ">=7.2",
-        "ext-pdo": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "behat/behat": "v3.5.0",

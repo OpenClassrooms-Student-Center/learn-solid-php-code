@@ -112,13 +112,13 @@ try {
 
                 $music = Music::initialize();
                 $form = new MusicForm($music);
-                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'ajouter une piste');
+                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'Ajouter une piste');
             }
             break;
 
         case 'ajouter_musique':
             if (isset($getRequest['album_id'])) {
-                if (!$fileRequest['file']['error'] == 0) {
+                if ($fileRequest['file']['error'] !== 0) {
                     throw new Exception("Problème d'upload, contactez un administrateur...");
                     /* en cas de fichier corrompu ou trop gros */
                 }
@@ -136,7 +136,7 @@ try {
                     $title = 'Piste enregistrée';
 
                     $uploader = new Uploader('file');
-                    $uploader->validTypes = array('audio/mp3');
+                    $uploader->validTypes = ['audio/mp3, audio/mpeg'];
                     $uploader->setName($data['file']);
                     $uploader->uploadFile(DATA_FILE);
 
