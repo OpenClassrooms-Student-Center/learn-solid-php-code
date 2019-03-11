@@ -13,7 +13,7 @@ function get($configKey, $default)
     return $default;
 }
 
-define('SERVEUR_URL', get('SERVEUR_URL', 'http://wp.local'));
+define('SERVEUR_URL', '');
 define('BASE_URL', SERVEUR_URL . '/');
 define('BASE_FILE', __DIR__.'/../');
 define('VIEWS', __DIR__.'/../views/');
