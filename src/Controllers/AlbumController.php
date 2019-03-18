@@ -30,24 +30,21 @@ class AlbumController
             ]);
         }
 
-        $response = $this->render('albums/manage', [
+        return $this->render('albums/manage', [
             'title' => "Module d'administration des Albums",
             'tableContent' => $content,
         ]);
-
-        return $this->returnResponse($response);
     }
 
     public function addAlbum()
     {
         $album = Album::initialize();
-        $response = $this->render('albums/add', [
+
+        return $this->render('albums/add', [
             'title' => 'Ajouter un album',
             'albumId' => $album->getId(),
             'submitUrl' => 'index.php?a=enregistrernouveau',
         ]);
-
-        return $this->returnResponse($response);
     }
 
     public function submitAddAlbum(array $postRequest, array $fileRequest)
@@ -72,13 +69,11 @@ class AlbumController
             $formErrors = $form->getErrors();
         }
 
-        $response = $this->render('albums/submit_add', [
+        return $this->render('albums/submit_add', [
             'title' => $title,
             'album' => $album,
             'formErrors' => $formErrors,
         ]);
-
-        return $this->returnResponse($response);
     }
 
     public function updateAlbum(array $getRequest)
@@ -96,13 +91,13 @@ class AlbumController
         $album = AlbumRepository::read($id);
         $playList = new MusicCollection(AlbumRepository::getPlayList($id));
 
-        return $this->returnResponse($this->render('albums/update', [
+        return $this->render('albums/update', [
             'title' => 'Modifier un album',
             'album' => $album,
             'fileSource' => DATA_URL . 'tb_' . $album->getFile(),
             'submitUrl' => ADMIN_URL . "index.php?a=enregistrermodif&amp;id=$id",
             'playList' => $playList->viewHtml(),
-        ]));
+        ]);
     }
 
     public function deleteAlbum(array $getRequest)
@@ -118,9 +113,9 @@ class AlbumController
             FilesManager::deleteFile($music->getFile(), DATA_FILE);
         }
 
-        return $this->returnResponse($this->render('albums/delete', [
+        return $this->render('albums/delete', [
             'title' => 'Album supprimé',
-        ]));
+        ]);
     }
 
     public function render($template, $parameters)
@@ -131,13 +126,5 @@ class AlbumController
         require $templatePath;
 
         return ob_get_clean();
-    }
-
-    public function returnResponse($content)
-    {
-        header('HTTP/1.1 200 OK', true, 200);
-        header('Content-Type: text/html');
-
-        echo $content;
     }
 }

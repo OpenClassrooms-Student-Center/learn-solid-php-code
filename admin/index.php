@@ -24,6 +24,14 @@ $footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
 $controller = new AlbumController();
 
+function sendHttpResponse($content)
+{
+    header('HTTP/1.1 200 OK', true, 200);
+    header('Content-Type: text/html');
+
+    echo $content;
+}
+
 try {
     $getRequest = $_GET;
     $postRequest = $_POST;
@@ -36,15 +44,17 @@ try {
      */
     switch ($action) {
         case 'ajouter':
-            return $controller->addAlbum();
+            return sendHttpResponse($controller->addAlbum());
             break;
 
         case 'modifier':
-            return $controller->updateAlbum($getRequest);
+            return sendHttpResponse($controller->updateAlbum($getRequest));
             break;
 
         case 'enregistrernouveau':
-            return $controller->submitAddAlbum($postRequest, $fileRequest);
+            return sendHttpResponse($controller
+                ->submitAddAlbum($postRequest, $fileRequest)
+            );
             break;
 
         case 'enregistrermodif':
@@ -100,7 +110,7 @@ try {
             break;
 
         case 'supprimer':
-            return $controller->deleteAlbum($getRequest);
+            return sendHttpResponse($controller->deleteAlbum($getRequest));
             break;
 
         /* Gestion des pistes */
@@ -221,7 +231,7 @@ try {
 
         // Page d'administration : affiche tous les Albums de la BD
         default:
-            return $controller->manageAlbums();
+            return sendHttpResponse($controller->manageAlbums());
     }
 } catch (Exception $e) {
     $c = $e->getMessage();
