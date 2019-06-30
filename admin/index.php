@@ -14,6 +14,7 @@ use App\Classes\Music\Ui as MusicUi;
 use App\Classes\Tools\FilesManager;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\Strings;
+use App\Classes\Tools\View;
 use App\Classes\Music\Music;
 
 // initialisation des variables
@@ -23,14 +24,6 @@ $header = file_get_contents('../ui/fragments/header.frg.html');
 $footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
 $controller = new AlbumController();
-
-function sendHttpResponse($content)
-{
-    header('HTTP/1.1 200 OK', true, 200);
-    header('Content-Type: text/html');
-
-    echo $content;
-}
 
 try {
     $getRequest = $_GET;
@@ -44,15 +37,15 @@ try {
      */
     switch ($action) {
         case 'ajouter':
-            return sendHttpResponse($controller->addAlbum());
+            return View::sendHttpResponse($controller->addAlbum());
             break;
 
         case 'modifier':
-            return sendHttpResponse($controller->updateAlbum($getRequest));
+            return View::sendHttpResponse($controller->updateAlbum($getRequest));
             break;
 
         case 'enregistrernouveau':
-            return sendHttpResponse($controller
+            return View::sendHttpResponse($controller
                 ->submitAddAlbum($postRequest, $fileRequest)
             );
             break;
@@ -110,7 +103,7 @@ try {
             break;
 
         case 'supprimer':
-            return sendHttpResponse($controller->deleteAlbum($getRequest));
+            return View::sendHttpResponse($controller->deleteAlbum($getRequest));
             break;
 
         /* Gestion des pistes */
@@ -231,7 +224,7 @@ try {
 
         // Page d'administration : affiche tous les Albums de la BD
         default:
-            return sendHttpResponse($controller->manageAlbums());
+            return View::sendHttpResponse($controller->manageAlbums());
     }
 } catch (Exception $e) {
     $c = $e->getMessage();

@@ -6,6 +6,7 @@ use App\Models\AlbumRepository;
 use App\Models\Album;
 use App\Classes\Album\Form as AlbumForm;
 use App\Classes\Music\Collection as MusicCollection;
+use App\Classes\Tools\View;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\FilesManager;
@@ -21,16 +22,16 @@ class AlbumController
         $content = '';
 
         foreach ($albums as $album) {
-            $content = $content . $this->render('albums/admin_row', [
+            $content = $content . View::render('albums/admin_row', [
                 'album' => $album,
             ]);
 
-            $content .= $this->render('albums/admin_modal', [
+            $content .= View::render('albums/admin_modal', [
                 'album' => $album,
             ]);
         }
 
-        return $this->render('albums/manage', [
+        return View::render('albums/manage', [
             'title' => "Module d'administration des Albums",
             'tableContent' => $content,
         ]);
@@ -40,7 +41,7 @@ class AlbumController
     {
         $album = Album::initialize();
 
-        return $this->render('albums/add', [
+        return View::render('albums/add', [
             'title' => 'Ajouter un album',
             'albumId' => $album->getId(),
             'submitUrl' => 'index.php?a=enregistrernouveau',
@@ -69,7 +70,7 @@ class AlbumController
             $formErrors = $form->getErrors();
         }
 
-        return $this->render('albums/submit_add', [
+        return View::render('albums/submit_add', [
             'title' => $title,
             'album' => $album,
             'formErrors' => $formErrors,
@@ -79,19 +80,17 @@ class AlbumController
     public function updateAlbum(array $getRequest)
     {
         if (!isset($getRequest['id'])) {
-            $content = $this->render('albums/update_not_found', [
+            return $this->render('albums/update_not_found', [
                 'title' => "l'Album n'a pas été trouvé",
                 'albumId' => '',
             ]);
-
-            return $this->returnResponse($content);
         }
 
         $id = $getRequest['id'];
         $album = AlbumRepository::read($id);
         $playList = new MusicCollection(AlbumRepository::getPlayList($id));
 
-        return $this->render('albums/update', [
+        return View::render('albums/update', [
             'title' => 'Modifier un album',
             'album' => $album,
             'fileSource' => DATA_URL . 'tb_' . $album->getFile(),
@@ -113,18 +112,8 @@ class AlbumController
             FilesManager::deleteFile($music->getFile(), DATA_FILE);
         }
 
-        return $this->render('albums/delete', [
+        return View::render('albums/delete', [
             'title' => 'Album supprimé',
         ]);
-    }
-
-    public function render($template, $parameters)
-    {
-        $templatePath = VIEWS . $template . '.html.php';
-
-        ob_start();
-        require $templatePath;
-
-        return ob_get_clean();
     }
 }
