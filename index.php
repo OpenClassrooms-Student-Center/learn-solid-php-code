@@ -1,8 +1,8 @@
 <?php
 
-#
-# Front Controller
-#
+//
+// Front Controller
+//
 
 require_once 'config/config.php';
 require_once 'config/config_db.php';

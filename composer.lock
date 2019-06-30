@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38fa61f20fcad187468686347eded431",
+    "content-hash": "0a9de3e26cef3bd131dc3cc799d5cdfc",
     "packages": [],
     "packages-dev": [
         {
@@ -2451,7 +2451,7 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v3.4.22",
+            "version": "v3.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
@@ -3319,8 +3319,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.2",
-        "ext-pdo": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "ext-pdo": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

@@ -1,27 +1,26 @@
 Feature:
-    In order to list the latest albums
-    As a visitor
-    I need to be able to show the list of albums
-    And to access to "New album" page
-    And to access to "Admin part" page
-    And to access to "Help" page
+    En tant que visiteur
+    Je dois pouvoir accéder à la page d'accueil
+    Et à la page "Nouvel Album"
+    Et à la page "Gestion des albums"
+    Et à la page d'"Aide"
 
-Scenario: Access the list of latest albums
+Scenario: Accéder à la liste des albums
     Given I am on the homepage
     Then I should see "Les derniers Albums enregistrés"
     Then I should see "Liste de tous les Albums"
 
-Scenario: Access the "New album" page
+Scenario: Accéder à la page Nouvel Album
     Given I am on the homepage
     When I follow "Nouvel Album"
     Then I should see "Ajouter un album"
 
-Scenario: Access the "Admin part" page
+Scenario: Accéder à la page "Gestion des albums"
     Given I am on the homepage
     When I follow "Gestion des albums"
     Then I should see "Module d'administration des Albums"
 
-Scenario: Access the "Help" page
+Scenario: Accéder à la page d'aide
     Given I am on the homepage
     When I follow "Aide"
     Then I should see "Principe de ce site"

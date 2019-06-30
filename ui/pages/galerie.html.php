@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
+    <link rel="icon" href="../ui/img/favicon.ico" />
     <title>We Play Music !</title>
     <link rel="stylesheet" type="text/css" media="all" href="../ui/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../ui/css/base.css"/>

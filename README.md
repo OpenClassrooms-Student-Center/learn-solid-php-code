@@ -9,7 +9,7 @@ Installation:
 
 It's done.
 
+Copyrights
+----------
 
-Warnings:
----------
-Verify the rights on the 'data' directory.
+Images and pictures are under domain public: you can retrieve the mp3 files using the [Free Music Archive'](https://freemusicarchive.org) and the picture on Google Images (filter by authorizations).
