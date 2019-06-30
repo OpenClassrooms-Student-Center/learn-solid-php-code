@@ -2,24 +2,26 @@
 
 require_once '../config/config.php';
 require_once '../config/config_db.php';
-
 require_once '../vendor/autoload.php';
 
 use App\Classes\Album\Repository as AlbumRepository;
 use App\Classes\Album\Collection as AlbumCollection;
+use App\Controllers\PublicController;
+use App\Classes\Tools\View;
 use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Ui as MusicUi;
 
+// initialisation des variables
+$title = '';
+$c = '';
+$header = file_get_contents('../ui/fragments/header.frg.html');
+$footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
+$controller = new PublicController();
+
 try {
     $getRequest = $_GET;
     $action = isset($getRequest['a']) ? $getRequest['a'] : '';
-
-    /* initialisation des variables */
-    $title = '';
-    $c = '';
-    $header = file_get_contents('../ui/fragments/header.frg.html');
-    $footer = file_get_contents('../ui/fragments/footer.frg.html');
 
     switch ($action) {
         case 'ecouter':
@@ -53,13 +55,7 @@ try {
             break;
 
         case 'aide':
-            $titre = 'Comment ça fonctionne ?';
-            $c = file_get_contents('../ui/fragments/aide.frg.html');
-            $c .= <<<EOT
-            <script type="text/javascript">
-                $('.nav li:eq(2)').attr('class','active');
-            </script>
-EOT;
+            return View::sendHttpResponse($controller->help());
             break;
 
         default:

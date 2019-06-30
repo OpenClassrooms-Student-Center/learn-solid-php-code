@@ -12,9 +12,9 @@ use App\Controllers\AlbumController;
 use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Ui as MusicUi;
 use App\Classes\Tools\FilesManager;
-use App\Classes\Tools\HttpResponse;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\Strings;
+use App\Classes\Tools\View;
 use App\Classes\Music\Music;
 
 // initialisation des variables
@@ -37,15 +37,15 @@ try {
      */
     switch ($action) {
         case 'ajouter':
-            return HttpResponse::send($controller->addAlbum());
+            return View::sendHttpResponse($controller->addAlbum());
             break;
 
         case 'modifier':
-            return HttpResponse::send($controller->updateAlbum($getRequest));
+            return View::sendHttpResponse($controller->updateAlbum($getRequest));
             break;
 
         case 'enregistrernouveau':
-            return HttpResponse::send($controller
+            return View::sendHttpResponse($controller
                 ->submitAddAlbum($postRequest, $fileRequest)
             );
             break;
@@ -103,7 +103,7 @@ try {
             break;
 
         case 'supprimer':
-            return HttpResponse::send($controller->deleteAlbum($getRequest));
+            return View::sendHttpResponse($controller->deleteAlbum($getRequest));
             break;
 
         /* Gestion des pistes */
@@ -224,7 +224,7 @@ try {
 
         // Page d'administration : affiche tous les Albums de la BD
         default:
-            return HttpResponse::send($controller->manageAlbums());
+            return View::sendHttpResponse($controller->manageAlbums());
     }
 } catch (Exception $e) {
     $c = $e->getMessage();
