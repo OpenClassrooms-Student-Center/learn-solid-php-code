@@ -8,6 +8,7 @@ use App\Classes\Album\Form as AlbumForm;
 use App\Classes\Music\Collection as MusicCollection;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
+use App\Classes\Tools\HttpResponse;
 use App\Classes\Tools\FilesManager;
 
 /**
@@ -84,7 +85,7 @@ class AlbumController
                 'albumId' => '',
             ]);
 
-            return $this->returnResponse($content);
+            return HttpResponse::send($content);
         }
 
         $id = $getRequest['id'];
