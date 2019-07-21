@@ -9,6 +9,8 @@ class View
         $templatePath = VIEWS . $template . '.html.php';
 
         ob_start();
+        // les paramètres seront utilisés lors de l'appel de la fonction
+        $parameters;
         require $templatePath;
 
         return ob_get_clean();
