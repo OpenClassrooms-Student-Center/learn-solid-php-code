@@ -6,7 +6,7 @@ class Mp3Ui extends Ui
 {
     protected $music;
 
-    public function __construct(Mp3 $music)
+    public function __construct($music)
     {
         parent::__construct($music);
     }
@@ -83,7 +83,7 @@ EOT;
     public function makeAdminRowHtml()
     {
         $id = $this->music->getId();
-        $title = $this->music->getTitre();
+        $title = $this->music->getTitle();
         $adminUrl = ADMIN_URL;
 
         $html = <<<EOT
