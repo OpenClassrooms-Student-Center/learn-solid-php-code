@@ -13,7 +13,7 @@ class Ui
         $this->music = $music;
     }
 
-    public static function factory(Music $music)
+    public static function factory($music)
     {
         $extension = pathinfo($music->getFile(), PATHINFO_EXTENSION);
         switch ($extension) {
