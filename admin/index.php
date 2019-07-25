@@ -8,6 +8,7 @@ use App\Classes\Music\Repository as MusicRepository;
 use App\Classes\Album\Repository as AlbumRepository;
 use App\Classes\Music\Form as MusicForm;
 use App\Classes\Album\Form as AlbumForm;
+use App\Controllers\MusicController;
 use App\Controllers\AlbumController;
 use App\Classes\Album\Ui as AlbumUi;
 use App\Classes\Music\Ui as MusicUi;
@@ -24,6 +25,7 @@ $header = file_get_contents('../ui/fragments/header.frg.html');
 $footer = file_get_contents('../ui/fragments/footer.frg.html');
 $skeleton = '../ui/pages/galerie.html.php';
 $controller = new AlbumController();
+$musicController = new MusicController();
 
 try {
     $getRequest = $_GET;
@@ -109,117 +111,23 @@ try {
         /* Gestion des pistes */
 
         case 'uploader':
-            $title = "Upload d'un titre";
-            if (isset($getRequest['id'])) {
-                $albumId = $getRequest['id'];
-
-                $music = Music::initialize();
-                $form = new MusicForm($music);
-                $c = $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'Ajouter une piste');
-            }
+            return View::sendHttpResponse($musicController->displayUploadForm($getRequest));
             break;
 
         case 'ajouter_musique':
-            if (isset($getRequest['album_id'])) {
-                if ($fileRequest['file']['error'] !== 0) {
-                    throw new Exception("Problème d'upload, contactez un administrateur...");
-                    /* en cas de fichier corrompu ou trop gros */
-                }
-
-                $data = $postRequest;
-                $fileData = $fileRequest;
-
-                $data['album_id'] = $getRequest['album_id'];
-                $data['file'] = $data['album_id'] . $fileData['file']['name'];
-                Strings::htmlEncodeArray($data);
-
-                $music = Music::initialize($data);
-                $form = new MusicForm($music);
-                if ($form->verify($fileData['file']['type'])) {
-                    $title = 'Piste enregistrée';
-
-                    $uploader = new Uploader('file');
-                    $uploader->validTypes = ['audio/mp3, audio/mpeg'];
-                    $uploader->setName($data['file']);
-                    $uploader->uploadFile(DATA_FILE);
-
-                    MusicRepository::new($music);
-                    $musicUi = MusicUi::factory($music);
-                    $c = $musicUi->makeAdminHtml();
-                } else {
-                    $c = "<h3 class='alert'>Echec d'enregistrement</h3>";
-                    $albumId = $data['album_id'];
-                    $c .= $form->makeForm(ADMIN_URL . "index.php?a=ajouter_musique&amp;album_id=$albumId", 'ajouter une piste');
-                }
-            }
+            return View::sendHttpResponse($musicController->uploadMusic($postRequest, $fileRequest));
             break;
 
         case 'modifier_musique':
-            $title = 'Modifier une Musique';
-            if (isset($getRequest['id'])) {
-                $id = $getRequest['id'];
-                $music = MusicRepository::read($id);
-                $form = new MusicForm($music);
-                $c = $form->makeForm(ADMIN_URL . "index.php?a=modifier_musique_modif&amp;id=$id", 'Modifier');
-            } else {
-                $c = "<h3 class='alert'>Echec lors de la modification de la Musique</h3>";
-            }
+            return View::sendHttpResponse($musicController->displayUpdateForm($getRequest));
             break;
 
         case 'modifier_musique_modif':
-            $title = 'Modifications enregistrées';
-            $data = $postRequest;
-            $fileData = is_array($fileRequest['file']) ? $fileRequest['file'] : array();
-            if (isset($data['id'])) {
-                $id = $data['id'];
-
-                if (!empty($fileData['name'])) {
-                    /* attention à ne pas effacer si le nom du nouveau fichier est identique à son prédecesseur */
-                    if ($id . $fileData['name'] == $data['file']) {
-                        $case = 1; // On uploade mais on efface pas
-                    } else {
-                        $case = 2; //On uploade et on efface
-                        $data['file'] = $data['id'] . $fileData['name'];
-                    }
-                } else {
-                    $case = 0;
-                    $fileData['type'] = 'audio/mpeg';
-                }
-                Strings::htmlEncodeArray($data);
-
-                $music = MusicRepository::read($id);
-                /* mettre à jour avec les données du formulaire, impose de redownloader l'image? */
-                if ($case > 0) {
-                    //Si nouveau, alors upload/redimensionnement de la nouvelle image
-                    $uploader = new Uploader('file');
-                    $uploader->validTypes = array('audio/ogg', 'audio/mpeg');
-                    $uploader->setName($data['file']);
-                    $uploader->uploadFile(DATA_FILE);
-                    if ($case > 1) {
-                        FilesManager::deleteFile($music->getFile(), DATA_FILE);
-                    }
-                }
-
-                $music->update($data);
-                MusicRepository::update($music);
-                $form = new MusicForm($music);
-                if ($form->verify($fileData['type'])) {
-                    MusicRepository::update($music);
-                    $musicUi = MusicUi::factory($music);
-                    $c = $musicUi->makeHtml();
-                } else {
-                    $titre = 'Echec de modification';
-                    $c = $form->makeForm(ADMIN_URL . "index.php?a=modifier_musique_modif&amp;id=$id", 'modifier');
-                }
-            }
+            return View::sendHttpResponse($musicController->updateMusic($postRequest, $fileRequest));
             break;
 
         case 'supprimer_musique':
-            $title = 'Musique supprimée';
-            $id = $getRequest['id'];
-            $music = MusicRepository::read($id);
-            MusicRepository::delete($music);
-            FilesManager::deleteFile($music->getFile(), DATA_FILE);
+            return View::sendHttpResponse($musicController->deleteMusic($getRequest));
             break;
 
         // Page d'administration : affiche tous les Albums de la BD

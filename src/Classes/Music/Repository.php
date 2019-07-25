@@ -34,7 +34,7 @@ class Repository
     public static function update(Music $music)
     {
         $db = Database::getInstance()->getConnexion();
-        $sth = $db->prepare('update songs set titre=:titre where id=:id');
+        $sth = $db->prepare('update songs set title=:title where id=:id');
 
         $sth->execute([
             'id' => $music->getId(),
