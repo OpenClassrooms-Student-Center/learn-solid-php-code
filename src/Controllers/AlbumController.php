@@ -10,6 +10,7 @@ use App\Classes\Tools\View;
 use App\Classes\Tools\Strings;
 use App\Classes\Tools\Uploader;
 use App\Classes\Tools\FilesManager;
+use App\Classes\Tools\ImageResizer;
 
 /**
  * Albums management
@@ -63,7 +64,7 @@ class AlbumController
             $uploader->validTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/JPG'];
             $uploader->setName($postRequest['file']);
             $uploader->uploadFile(DATA_FILE);
-            $uploader->resize(DATA_FILE . '/' . $postRequest['file'], DATA_FILE . '/' . 'tb_' . $postRequest['file'], 150, 150);
+            ImageResizer::resize(DATA_FILE . '/' . $postRequest['file'], DATA_FILE . '/' . 'tb_' . $postRequest['file'], 150, 150);
             AlbumRepository::new($album);
         } else {
             $title = "Echec de l'enregistrement";
